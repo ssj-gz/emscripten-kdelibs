@@ -236,7 +236,7 @@ set(KDE4_KDE3SUPPORT_INCLUDES ${CMAKE_SOURCE_DIR}/kde3support
 
 if(NOT WINCE AND NOT EMSCRIPTEN)
  set(KDE4_KHTML_INCLUDES ${CMAKE_SOURCE_DIR}/khtml)
-endif(NOT WINCE)
+endif(NOT WINCE AND NOT EMSCRIPTEN)
 
 
 ################# configure checks and create the configured files #################
