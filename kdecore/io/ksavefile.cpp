@@ -261,8 +261,10 @@ bool KSaveFile::backupFile( const QString& qFilename, const QString& backupDir )
     int maxnum = g.readEntry( "MaxBackups", 10 );
     if ( type.toLower() == QLatin1String("numbered") ) {
         return( numberedBackupFile( qFilename, backupDir, extension, maxnum ) );
+#ifndef EMSCRIPTEN
     } else if ( type.toLower() == QLatin1String("rcs") ) {
         return( rcsBackupFile( qFilename, backupDir, message ) );
+#endif
     } else {
         return( simpleBackupFile( qFilename, backupDir, extension ) );
     }
@@ -284,6 +286,7 @@ bool KSaveFile::simpleBackupFile( const QString& qFilename,
     return QFile::copy(qFilename, backupFileName);
 }
 
+#ifndef EMSCRIPTEN
 bool KSaveFile::rcsBackupFile( const QString& qFilename,
                                const QString& backupDir,
                                const QString& backupMessage )
@@ -350,6 +353,7 @@ bool KSaveFile::rcsBackupFile( const QString& qFilename,
         return true;
     }
 }
+#endif
 
 bool KSaveFile::numberedBackupFile( const QString& qFilename,
                                     const QString& backupDir,
