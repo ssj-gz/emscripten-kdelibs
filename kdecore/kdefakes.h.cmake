@@ -42,7 +42,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-unsigned long strlcat(char*, const char*, unsigned long);
+size_t strlcat(char*, const char*, unsigned long);
 #ifdef __cplusplus
 }
 #endif

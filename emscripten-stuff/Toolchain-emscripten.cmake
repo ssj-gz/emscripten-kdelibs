@@ -6,8 +6,8 @@ set(EMSCRIPTEN_SYSTEM $ENV{EMSCRIPTEN_ROOT_PATH}/system/)
 SET(CMAKE_SYSTEM_NAME Emscripten)
  
 # which compilers to use for C and C++
-SET(CMAKE_C_COMPILER clang)
-SET(CMAKE_CXX_COMPILER clang++)
+SET(CMAKE_C_COMPILER ccache clang)
+SET(CMAKE_CXX_COMPILER ccache clang++)
 set(CMAKE_CXX_FLAGS "-emit-llvm -nostdinc++  -m32 -O0 -isystem${EMSCRIPTEN_SYSTEM}/include -isystem${EMSCRIPTEN_SYSTEM}/include/bsd -isystem${EMSCRIPTEN_SYSTEM}/include/libcxx -isystem${EMSCRIPTEN_SYSTEM}/include/libc -isystem${EMSCRIPTEN_SYSTEM}/include/sys ")
 set(CMAKE_C_FLAGS "-emit-llvm -nostdinc -m32 -isystem${EMSCRIPTEN_SYSTEM}/include -isystem${EMSCRIPTEN_SYSTEM}/include/bsd -isystem${EMSCRIPTEN_SYSTEM}/include/libcxx -isystem${EMSCRIPTEN_SYSTEM}/include/libc -isystem${EMSCRIPTEN_SYSTEM}/include/sys ")
 add_definitions("-DEMSCRIPTEN") 
