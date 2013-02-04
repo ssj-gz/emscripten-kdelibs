@@ -228,7 +228,6 @@ set(kdecore_LIB_SRCS
    io/klimitediodevice.cpp
    io/kmessage.cpp
    io/kmountpoint.cpp
-   io/kprocess.cpp
    io/ksavefile.cpp
    io/ktar.cpp
    io/ktempdir.cpp
@@ -289,7 +288,7 @@ set(kdecore_LIB_SRCS
 )
 
 if (NOT EMSCRIPTEN)
-    set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS} io/kdebugdbusiface.cpp)
+    set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS} io/kdebugdbusiface.cpp io/kprocess.cpp)
 endif()
 
 if (NOT KDECORE_NO_KDE3SUPPORT)

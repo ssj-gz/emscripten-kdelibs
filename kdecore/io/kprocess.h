@@ -22,6 +22,8 @@
 #ifndef KPROCESS_H
 #define KPROCESS_H
 
+#ifndef EMSCRIPTEN
+
 #include <kdecore_export.h>
 
 #include <QtCore/QProcess>
@@ -336,6 +338,8 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _k_forwardStdout())
     Q_PRIVATE_SLOT(d_func(), void _k_forwardStderr())
 };
+
+#endif
 
 #endif
 
