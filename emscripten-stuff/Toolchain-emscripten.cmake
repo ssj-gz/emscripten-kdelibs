@@ -21,6 +21,7 @@ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 # FindQt4.cmake querys qmake to get information, this doesn't work when crosscompiling
 set(QT_BINARY_DIR   ${KDE_PREFIX}/bin)
 set(QT_LIBRARY_DIR  ${KDE_PREFIX}/lib)
+set(QT_HEADERS_DIR  ${KDE_PREFIX}/include)
 set(QT_QTCORE_LIBRARY   ${KDE_PREFIX}/lib/QtCore.a)
 set(QT_QTCORE_INCLUDE_DIR ${KDE_PREFIX}/include/QtCore)
 set(QT_MKSPECS_DIR  ${KDE_PREFIX}/mkspecs)
