@@ -52,8 +52,12 @@ KFileSystemType::Type determineFileSystemTypeImpl(const QByteArray& path)
         return KFileSystemType::Unknown;
     return kde_typeFromName(buf.f_fstypename);
 }
-
-#elif defined(Q_OS_LINUX) || defined(Q_OS_HURD)
+#elif defined(Q_OS_EMSCRIPTEN)
+KFileSystemType::Type determineFileSystemTypeImpl(const QByteArray& path)
+{
+        return KFileSystemType::Unknown;
+}
+#elif defined(Q_OS_LINUX) || defined(Q_OS_HURD))
 # include <sys/vfs.h>
 # ifdef QT_LINUXBASE
    // LSB 3.2 has statfs in sys/statfs.h, sys/vfs.h is just an empty dummy header
