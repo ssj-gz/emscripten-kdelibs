@@ -78,7 +78,9 @@
 #include <unistd.h>	// getpid
 #include <stdarg.h>	// vararg stuff
 #include <ctype.h>      // isprint
+#ifndef EMSCRIPTEN
 #include <syslog.h>
+#endif
 #include <errno.h>
 #include <string.h>
 #include <kconfig.h>
@@ -119,6 +121,7 @@ public:
     qint64 writeData(const char *, qint64 len) { return len; }
 };
 
+#ifndef EMSCRIPTEN
 class KSyslogDebugStream: public KNoDebugStream
 {
     // Q_OBJECT
@@ -136,6 +139,7 @@ public:
 private:
     int m_priority;
 };
+#endif
 
 class KFileDebugStream: public KNoDebugStream
 {
@@ -482,6 +486,7 @@ struct KDebugPrivate
         return result;
     }
 
+#ifndef EMSCRIPTEN
     QDebug setupSyslogWriter(QtMsgType type)
     {
         if (!syslogwriter.hasLocalData())
@@ -507,6 +512,7 @@ struct KDebugPrivate
         syslogwriter.localData()->setPriority(level);
         return result;
     }
+#endif
 
     QDebug setupQtWriter(QtMsgType type)
     {
@@ -656,9 +662,11 @@ struct KDebugPrivate
         case MessageBoxOutput:
             s = setupMessageBoxWriter(type, areaName);
             break;
+#ifndef EMSCRIPTEN
         case SyslogOutput:
             s = setupSyslogWriter(type);
             break;
+#endif
         case NoOutput:
             s = QDebug(&devnull);
             return s; //no need to take the time to "print header" if we don't want to output anyway
@@ -703,7 +711,9 @@ struct KDebugPrivate
 
     KNoDebugStream devnull;
     QThreadStorage<QString*> m_indentString;
+#ifndef EMSCRIPTEN
     QThreadStorage<KSyslogDebugStream*> syslogwriter;
+#endif
     QThreadStorage<KFileDebugStream*> filewriter;
     QThreadStorage<KMessageBoxDebugStream*> messageboxwriter;
     KLineEndStrippingDebugStream lineendstrippingwriter;
