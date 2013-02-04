@@ -20,9 +20,11 @@ macro_bool_to_01(SYS_INOTIFY_H_FOUND HAVE_SYS_INOTIFY_H)
 configure_file(io/config-kdirwatch.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/io/config-kdirwatch.h )
 
 # Configure checks for network/ but also for netsupp.*
-include(network/ConfigureChecks.cmake)
-configure_file(network/config-network.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/network/config-network.h )
-include_directories( ${CMAKE_CURRENT_BINARY_DIR}/network )
+if (NOT CMAKE_SYSTEM_NAME MATCHES Emscripten)
+    include(network/ConfigureChecks.cmake)
+    configure_file(network/config-network.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/network/config-network.h )
+    include_directories( ${CMAKE_CURRENT_BINARY_DIR}/network )
+endif()
 
 # Configure checks for date/
 include(date/ConfigureChecks.cmake)
