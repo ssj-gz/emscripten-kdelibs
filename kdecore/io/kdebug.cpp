@@ -217,11 +217,16 @@ struct KDebugPrivate
     typedef QHash<unsigned int, Area> Cache;
 
     KDebugPrivate()
-        : config(0), kDebugDBusIface(0), m_disableAll(false), m_seenMainComponent(false)
+        : config(0), 
+#ifndef EMSCRIPTEN
+          kDebugDBusIface(0),
+#endif
+          m_disableAll(false), m_seenMainComponent(false)
     {
         Q_ASSERT(int(QtDebugMsg) == 0);
         Q_ASSERT(int(QtFatalMsg) == 3);
 
+#ifndef EMSCRIPTEN
         // Create the D-Bus interface if it has not been created yet
         // But only register to D-Bus if we are in a process with a D-Bus event loop,
         // otherwise introspection will just hang.
@@ -237,6 +242,7 @@ struct KDebugPrivate
         if (kde_kdebug_enable_dbus_interface) {
             kDebugDBusIface = new KDebugDBusIface;
         }
+#endif
 
         for (int i = 0; i < 8; i++) {
             m_nullOutputYesNoCache[i] = -1;
@@ -247,7 +253,9 @@ struct KDebugPrivate
     ~KDebugPrivate()
     {
         delete config;
+#ifndef EMSCRIPTEN
         delete kDebugDBusIface;
+#endif
     }
 
     void loadAreaNames()
@@ -685,7 +693,9 @@ struct KDebugPrivate
 
     QMutex mutex;
     KConfig *config;
+#ifndef EMSCRIPTEN
     KDebugDBusIface *kDebugDBusIface;
+#endif
     Cache cache;
     bool m_disableAll;
     bool m_seenMainComponent; // false: area zero still contains qAppName

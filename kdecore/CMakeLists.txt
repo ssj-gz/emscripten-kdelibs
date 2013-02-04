@@ -223,7 +223,6 @@ set(kdecore_LIB_SRCS
    io/karchive.cpp
    io/kautosavefile.cpp
    io/kdebug.cpp
-   io/kdebugdbusiface.cpp
    io/kdirwatch.cpp
    io/kfilesystemtype_p.cpp
    io/klimitediodevice.cpp
@@ -288,6 +287,10 @@ set(kdecore_LIB_SRCS
    sonnet/backgroundengine.cpp
    sonnet/globals.cpp
 )
+
+if (NOT EMSCRIPTEN)
+    set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS} io/kdebugdbusiface.cpp)
+endif()
 
 if (NOT KDECORE_NO_KDE3SUPPORT)
    set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS}
