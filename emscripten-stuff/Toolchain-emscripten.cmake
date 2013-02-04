@@ -1,5 +1,5 @@
-set(KDE_PREFIX    $ENV{"EMSCRIPTEN_KDE_INSTALL"})
-set(KDE4_SRC_DIR  $ENV{"EMSCRIPTEN_KDE_SRC"})
+set(KDE_PREFIX    $ENV{EMSCRIPTEN_KDE_INSTALL})
+set(KDE4_SRC_DIR  $ENV{EMSCRIPTEN_KDE_SRC})
  
 # the name of the target operating system
 SET(CMAKE_SYSTEM_NAME Emscripten)
@@ -19,9 +19,9 @@ set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
  
 # FindQt4.cmake querys qmake to get information, this doesn't work when crosscompiling
-set(QT_BINARY_DIR   ${KDE4_SRC_DIR}/qt-copy/bin)
+set(QT_BINARY_DIR   ${KDE_PREFIX}/bin)
 set(QT_LIBRARY_DIR  ${KDE_PREFIX}/lib)
-set(QT_QTCORE_LIBRARY   ${KDE_PREFIX}/lib/libQtCore4.a)
+set(QT_QTCORE_LIBRARY   ${KDE_PREFIX}/lib/QtCore.a)
 set(QT_QTCORE_INCLUDE_DIR ${KDE_PREFIX}/include/QtCore)
 set(QT_MKSPECS_DIR  ${KDE_PREFIX}/mkspecs)
 set(QT_MOC_EXECUTABLE  ${QT_BINARY_DIR}/moc)
