@@ -19,14 +19,18 @@
 */
 
 #include "ktoolinvocation.h"
+#ifndef EMSCRIPTEN
 #include "klauncher_iface.h"
+#endif
 #include "kdebug.h"
 #include "kglobal.h"
 #include "kstandarddirs.h"
 #include "kcomponentdata.h"
 #include "kurl.h"
 #include "kmessage.h"
+#ifndef EMSCRIPTEN
 #include "kservice.h"
+#endif
 #include <klockfile.h>
 #include <klocale.h>
 
@@ -52,6 +56,7 @@ KToolInvocation::~KToolInvocation()
 {
 }
 
+#ifndef EMSCRIPTEN
 Q_GLOBAL_STATIC_WITH_ARGS(org::kde::KLauncher, klauncherIface,
                           (QString::fromLatin1("org.kde.klauncher"), QString::fromLatin1("/KLauncher"), QDBusConnection::sessionBus()))
 
@@ -63,6 +68,7 @@ org::kde::KLauncher *KToolInvocation::klauncher()
     }
     return ::klauncherIface();
 }
+#endif
 
 static void printError(const QString& text, QString* error)
 {
@@ -89,6 +95,10 @@ int KToolInvocation::startServiceInternal(const char *_function,
                                           const QByteArray& startup_id, bool noWait,
                                           const QString& workdir)
 {
+#ifdef EMSCRIPTEN
+    kWarning() << "startServiceInternal not implemented for Emscripten";
+    return EINVAL;
+#else
     QString function = QLatin1String(_function);
     org::kde::KLauncher *launcher = KToolInvocation::klauncher();
     QDBusMessage msg = QDBusMessage::createMethodCall(launcher->service(),
@@ -137,6 +147,7 @@ int KToolInvocation::startServiceInternal(const char *_function,
     if (pid)
         *pid = reply.arguments().at(3).toInt();
     return reply.arguments().at(0).toInt();
+#endif // EMSCRIPTEN
 }
 
 #ifndef KDE_NO_DEPRECATED
@@ -251,6 +262,7 @@ void KToolInvocation::invokeHelp( const QString& anchor,
                                   const QString& _appname,
                                   const QByteArray& startup_id )
 {
+#ifndef EMSCRIPTEN
     if (!isMainThreadActive())
         return;
 
@@ -314,6 +326,7 @@ void KToolInvocation::invokeHelp( const QString& anchor,
 
     iface->call(QString::fromLatin1("openUrl"), url.url(), startup_id );
     delete iface;
+#endif
 }
 
 void KToolInvocation::invokeMailer(const QString &address, const QString &subject, const QByteArray& startup_id)
@@ -369,6 +382,7 @@ void KToolInvocation::invokeMailer(const KUrl &mailtoURL, const QByteArray& star
 
 void KToolInvocation::startKdeinit()
 {
+#ifndef EMSCRIPTEN
   KComponentData inst( "startkdeinitlock" );
   KLockFile lock( KStandardDirs::locateLocal("tmp", QString::fromLatin1("startkdeinitlock"), inst ));
   if( lock.lock( KLockFile::NoBlockFlag ) != KLockFile::LockOK ) {
@@ -391,6 +405,9 @@ void KToolInvocation::startKdeinit()
   QProcess::execute(srv, args);
 //  if ( gui )
 //    qApp->restoreOverrideCursor();
+#else
+  kWarning() << "startKdeinit not implemented for Emscripten.";
+#endif
 }
 
 #include "ktoolinvocation.moc"
