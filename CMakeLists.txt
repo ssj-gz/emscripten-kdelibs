@@ -234,7 +234,7 @@ set(KDE4_KDE3SUPPORT_INCLUDES ${CMAKE_SOURCE_DIR}/kde3support
                               ${CMAKE_SOURCE_DIR}/kde3support/kio
                               ${KDE4_KPARTS_INCLUDES})
 
-if(NOT WINCE)
+if(NOT WINCE AND NOT EMSCRIPTEN)
  set(KDE4_KHTML_INCLUDES ${CMAKE_SOURCE_DIR}/khtml)
 endif(NOT WINCE)
 
@@ -315,9 +315,9 @@ add_subdirectory( mimetypes  )
 add_subdirectory( kinit  )
 add_subdirectory( threadweaver )
 add_subdirectory( sonnet  )
-if(NOT WINCE)
+if(NOT WINCE AND NOT EMSCRIPTEN)
 add_subdirectory( khtml  )
-endif(NOT WINCE)
+endif(NOT WINCE AND NOT EMSCRIPTEN)
 add_subdirectory( interfaces  )
 #if ( NOT CMAKE_CROSSCOMPILING AND QT_QTDESIGNER_FOUND )
 add_subdirectory( kdewidgets  )
