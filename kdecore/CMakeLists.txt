@@ -13,7 +13,10 @@ configure_file(util/kdeversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdeversion.h 
 macro_optional_find_package(FAM)
 macro_bool_to_01(FAM_FOUND HAVE_FAM)
 
-check_include_files(sys/inotify.h SYS_INOTIFY_H_FOUND)
+if (NOT EMSCRIPTEN)
+    # CMake checks for inotify.h on the *host*, not the target: so don't look for it on Emscripten.
+    check_include_files(sys/inotify.h SYS_INOTIFY_H_FOUND)
+endif()
 macro_bool_to_01(SYS_INOTIFY_H_FOUND HAVE_SYS_INOTIFY_H)
 
 # Generate io/config-kdirwatch.h
