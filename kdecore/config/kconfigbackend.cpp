@@ -31,8 +31,10 @@
 
 #include "kglobal.h"
 //#include "klocale.h"
+#ifndef EMSCRIPTEN
 #include "kpluginloader.h"
 #include "kservicetypetrader.h"
+#endif
 //#include "kapplication.h"
 #include "kconfig.h"
 #include "kconfigini_p.h"
@@ -70,6 +72,7 @@ BackendPtr KConfigBackend::create(const KComponentData& componentData, const QSt
     KConfigBackend* backend = 0;
 
     if (system.compare(QLatin1String("INI"), Qt::CaseInsensitive) != 0) {
+#ifndef EMSCRIPTEN
         const QString constraint = QString::fromLatin1("[X-KDE-PluginInfo-Name] ~~ '%1'").arg(system);
         KService::List offers = KServiceTypeTrader::self()->query(QLatin1String("KConfigBackend"), constraint);
 
@@ -82,6 +85,9 @@ BackendPtr KConfigBackend::create(const KComponentData& componentData, const QSt
                 return BackendPtr(backend);
             }
         } // foreach offers
+#else
+        kWarning() << "Non-INI KConfig backends not currently supported in Emscripten.";
+#endif
     }
 
     //qDebug() << "default creation of the Ini backend";
