@@ -26,9 +26,11 @@
 #include <QtCore/QLibrary>
 #include <QtCore/QtPlugin>
 
+#ifndef EMSCRIPTEN
 #include "kpluginfactory.h"
 #include "kpluginloader.h"
 #include "klibrary.h"
+#endif
 
 #ifndef KDE_NO_DEPRECATED
 

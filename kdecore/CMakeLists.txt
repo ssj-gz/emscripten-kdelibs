@@ -370,13 +370,17 @@ set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS}
    util/klibrary.cpp
    util/kmacroexpander.cpp
    util/kpluginfactory.cpp
-   util/kpluginloader.cpp
+   #util/kpluginloader.cpp
    util/kshell.cpp
    util/krandom.cpp
    util/krandomsequence.cpp
    util/qtest_kde.cpp
    ${kdecore_OPTIONAL_SRCS}
 )
+
+if (NOT EMSCRIPTEN)
+    set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS} util/kpluginloader.cpp)
+endif()
 
 if(NOT KDE_NO_DEPRECATED)
     set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS}

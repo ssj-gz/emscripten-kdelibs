@@ -815,9 +815,13 @@ bool KConfig::isConfigWritable(bool warnUser)
         QString cmdToExec = KStandardDirs::findExe(QString::fromLatin1("kdialog"));
         if (!cmdToExec.isEmpty() && componentData().isValid())
         {
+#ifndef EMSCRIPTEN
             QProcess::execute(cmdToExec, QStringList()
                               << QString::fromLatin1("--title") << componentData().componentName()
                               << QString::fromLatin1("--msgbox") << errorMsg);
+#else
+            kWarning() << "WTF - why are we shelling out to kdialog to show a dialog? This is not supported in Emscripten, so just be aware that the following error occurred: " << errorMsg;
+#endif
         }
     }
 
