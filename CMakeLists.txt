@@ -125,8 +125,10 @@ macro_log_feature(SHAREDDESKTOPONTOLOGIES_FOUND "Shared desktop ontologies" "Sup
 macro_optional_find_package(QCA2)
 macro_log_feature(QCA2_FOUND "QCA2" "Support for remote plasma widgets" "http://delta.affinix.com/qca" FALSE "2.0.0" "")
 
-find_package(DBusMenuQt)
-macro_log_feature(DBUSMENUQT_FOUND "DBusMenuQt" "Support for notification area menus via the DBusMenu protocol" "https://launchpad.net/libdbusmenu-qt" TRUE "" "")
+if (NOT EMSCRIPTEN)
+    find_package(DBusMenuQt)
+    macro_log_feature(DBUSMENUQT_FOUND "DBusMenuQt" "Support for notification area menus via the DBusMenu protocol" "https://launchpad.net/libdbusmenu-qt" TRUE "" "")
+endif()
 
 ################# Disallow in-source build #################
 
