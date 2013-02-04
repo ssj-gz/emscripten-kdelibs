@@ -72,7 +72,7 @@ macro_log_feature(ZLIB_FOUND "ZLib" "Support for gzip compressed files and data 
 
 set(STRIGI_MIN_VERSION 0.6.3)
 find_package(Strigi)
-if (WIN32)
+if (WIN32 OR EMSCRIPTEN)
     set (STRIGI_REQUIRED FALSE)
     set (STRIGI_EXTRA_TEXT "")
 else (WIN32)
