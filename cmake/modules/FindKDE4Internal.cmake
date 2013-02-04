@@ -702,7 +702,6 @@ endif(_kdeBootStrapping  OR  TARGET ${KDE4_TARGET_PREFIX}nepomuk)
 # which helps with finding the phonon installed as part of kdesupport:
 
 # only make Phonon REQUIRED if KDE4 itself is REQUIRED
-message("Emscripten: ${Emscripten}")
 if (NOT CMAKE_SYSTEM_NAME MATCHES Emscripten)
     find_package(Phonon 4.3.80 ${_REQ_STRING_KDE4})
     set(KDE4_PHONON_LIBRARY ${PHONON_LIBRARY})
