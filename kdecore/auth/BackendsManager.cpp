@@ -42,6 +42,10 @@ BackendsManager::BackendsManager()
 
 QList< QObject* > BackendsManager::retrieveInstancesIn(const QString& path)
 {
+#ifdef EMSCRIPTEN
+    kWarning() << "No Auth backends for Emscripten";
+    return QList< QObject* >();
+#else
     QDir pluginPath(path);
 
     if (!pluginPath.exists()) {
@@ -73,6 +77,7 @@ QList< QObject* > BackendsManager::retrieveInstancesIn(const QString& path)
     }
 
     return retlist;
+#endif
 }
 
 void BackendsManager::init()
