@@ -203,6 +203,7 @@ public:
     static KDE_DEPRECATED T *createInstanceFromQuery(const QString &serviceType, const QString &constraint,
             QObject *parent, const QStringList &args, int *error = 0)
     {
+#ifndef EMSCRIPTEN
         const KService::List offers = KServiceTypeTrader::self()->query(serviceType, constraint);
         if (offers.isEmpty()) {
             if (error) {
@@ -212,6 +213,10 @@ public:
         }
 
         return KService::createInstance<T>(offers.begin(), offers.end(), parent, args, error);
+#else
+        kWarning() << "KServiceTypeTrader::createInstanceFromQuery not supported in Emscripten";
+        return 0;
+#endif
     }
 #endif
 

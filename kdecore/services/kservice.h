@@ -24,13 +24,16 @@
 #include "kserviceaction.h"
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
-#ifndef KDE_NO_DEPRECATED
+#if !(defined(KDE_NO_DEPRECATED)) && !(defined(EMSCRIPTEN))
 #include <klibloader.h>
 #endif
+#ifndef EMSCRIPTEN
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
+#endif
 #include <ksycocaentry.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 class KServiceType;
 class QDataStream;
@@ -553,6 +556,7 @@ public:
     T *createInstance(QWidget *parentWidget, QObject *parent,
             const QVariantList &args = QVariantList(), QString *error = 0) const
     {
+#ifndef EMSCRIPTEN
         KPluginLoader pluginLoader(*this);
         KPluginFactory *factory = pluginLoader.factory();
         if (factory) {
@@ -567,6 +571,10 @@ public:
             pluginLoader.unload();
         }
         return 0;
+#else
+        kWarning() << "KService::createInstance not supported on Emscripten";
+        return 0;
+#endif
     }
 
     /**
@@ -592,6 +600,7 @@ public:
                               const QStringList &args,
                               int *error = 0 )
     {
+#ifndef EMSCRIPTEN
         const QString library = service->library();
         if ( library.isEmpty() ) {
             if ( error )
@@ -600,6 +609,10 @@ public:
         }
 
         return KLibLoader::createInstance<T>( library, parent, args, error );
+#else
+        kWarning() << "KService::createInstance not supported on Emscripten";
+        return 0;
+#endif
     }
 #endif
 
@@ -623,6 +636,7 @@ public:
     static KDE_DEPRECATED T *createInstance(ServiceIterator begin, ServiceIterator end, QObject *parent = 0,
             const QVariantList &args = QVariantList(), QString *error = 0)
     {
+#ifndef EMSCRIPTEN
         for (; begin != end; ++begin) {
             KService::Ptr service = *begin;
             if (error) {
@@ -638,6 +652,10 @@ public:
             *error = KLibLoader::errorString(KLibLoader::ErrNoServiceFound);
         }
         return 0;
+#else
+        kWarning() << "KService::createInstance not supported on Emscripten";
+        return 0;
+#endif
     }
 #endif
 
@@ -648,6 +666,7 @@ public:
                               const QStringList &args,
                               int *error = 0 )
     {
+#ifndef EMSCRIPTEN
         for (; begin != end; ++begin ) {
             KService::Ptr service = *begin;
             if ( error )
@@ -660,6 +679,10 @@ public:
         if ( error )
             *error = KLibLoader::ErrNoServiceFound;
         return 0;
+#else
+        kWarning() << "KService::createInstance not supported on Emscripten";
+        return 0;
+#endif
     }
 #endif
 
