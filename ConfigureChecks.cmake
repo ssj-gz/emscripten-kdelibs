@@ -55,7 +55,10 @@ check_include_files(sys/select.h  HAVE_SYS_SELECT_H)                   # various
 check_include_files(sys/param.h   HAVE_SYS_PARAM_H)                    # various
 check_include_files("stdio.h;sys/mnttab.h"  HAVE_SYS_MNTTAB_H)         # kio, kdecore
 check_include_files(sys/mntent.h  HAVE_SYS_MNTENT_H)                   # solid, kio, kdecore
-check_include_files("sys/param.h;sys/mount.h"  HAVE_SYS_MOUNT_H)       # kio, kdecore
+if (NOT EMSCRIPTEN)
+    # CMake performs the check on the *host*, not the target, so pretend we don't have sys/mount.h
+    check_include_files("sys/param.h;sys/mount.h"  HAVE_SYS_MOUNT_H)       # kio, kdecore
+endif()
 check_include_files(unistd.h      HAVE_UNISTD_H)                       # various
 check_include_files(stdint.h      HAVE_STDINT_H)                       # various
 check_include_files("sys/types.h;netinet/in.h"  HAVE_NETINET_IN_H)     # kio
