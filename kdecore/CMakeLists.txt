@@ -35,8 +35,10 @@ configure_file(compression/config-compression.h.cmake ${CMAKE_CURRENT_BINARY_DIR
 include_directories( ${CMAKE_CURRENT_BINARY_DIR}/compression )
 
 # This file handles all the logic for compiling KAuth's backends
-include(auth/ConfigureChecks.cmake)
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/auth/ )
+if (NOT CMAKE_SYSTEM_NAME MATCHES Emscripten)
+    include(auth/ConfigureChecks.cmake)
+    include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/auth/ )
+endif()
 
 # Configure a small file to tell BackendsManager what to use
 configure_file(auth/BackendsConfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/BackendsConfig.h)
