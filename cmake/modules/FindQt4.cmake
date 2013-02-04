@@ -453,6 +453,7 @@ FIND_PROGRAM(QT_QMAKE_EXECUTABLE NAMES qmake qmake4 qmake-qt4 qmake-mac PATHS
   $ENV{QTDIR}/bin
   DOC "The qmake executable for the Qt installation to use"
 )
+message("QTDIR: ${QTDIR} QT_QMAKE_EXECUTABLE: ${QT_QMAKE_EXECUTABLE}")
 
 IF (QT_QMAKE_EXECUTABLE)
 
@@ -522,6 +523,8 @@ IF (QT_QMAKE_EXECUTABLE)
     # compute an overall version number which can be compared at once
     MATH(EXPR req_vers "${req_qt_major_vers}*10000 + ${req_qt_minor_vers}*100 + ${req_qt_patch_vers}")
     MATH(EXPR found_vers "${QT_VERSION_MAJOR}*10000 + ${QT_VERSION_MINOR}*100 + ${QT_VERSION_PATCH}")
+
+    message("QT_VERSION_MAJOR: ${QT_VERSION_MAJOR} QT_VERSION_MINOR: ${QT_VERSION_MINOR} QT_VERSION_PATCH: ${QT_VERSION_PATCH}")
 
     # Support finding *exactly* a particular version, for instance FIND_PACKAGE( Qt4 4.4.3 EXACT )
     IF( Qt4_FIND_VERSION_EXACT )
@@ -844,9 +847,20 @@ IF (QT4_QMAKE_FOUND)
   #
   ########################################
 
+  message("QT_LIBINFIX: ${QT_LIBINFIX}")
+  message("QT_LIBRARY_DIR: ${QT_LIBRARY_DIR}")
+  message("QT_STATIC: ${QT_STATIC}")
+  #set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
+  #set(CMAKE_FIND_LIBRARY_PREFIXES "")
+
+  message("CMAKE_FIND_LIBRARY_SUFFIXES: ${CMAKE_FIND_LIBRARY_SUFFIXES}")
+  message("CMAKE_FIND_LIBRARY_PREFIXES: ${CMAKE_FIND_LIBRARY_PREFIXES}")
+  #set(QT_LIBINFIX ".a")
+
   # find the libraries
   FOREACH(QT_MODULE ${QT_MODULES})
     STRING(TOUPPER ${QT_MODULE} _upper_qt_module)
+    message("Searching for ${QT_MODULE}${QT_LIBINFIX}")
     FIND_LIBRARY(QT_${_upper_qt_module}_LIBRARY_RELEASE 
                  NAMES ${QT_MODULE}${QT_LIBINFIX} ${QT_MODULE}${QT_LIBINFIX}4
                  PATHS ${QT_LIBRARY_DIR} NO_DEFAULT_PATH
@@ -855,6 +869,7 @@ IF (QT4_QMAKE_FOUND)
                  NAMES ${QT_MODULE}${QT_LIBINFIX}_debug ${QT_MODULE}${QT_LIBINFIX}d ${QT_MODULE}${QT_LIBINFIX}d4
                  PATHS ${QT_LIBRARY_DIR} NO_DEFAULT_PATH
         )
+    message("Blah: ${QT_CORE_LIBRARY_RELEASE} ${QT_CORE_LIBRARY_DEBUG}")
   ENDFOREACH(QT_MODULE)
 
   # QtUiTools not with other frameworks with binary installation (in /usr/lib)

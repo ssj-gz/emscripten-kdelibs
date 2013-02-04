@@ -1,0 +1,4 @@
+set(CMAKE_SYSTEM_NAME Emscripten)
+set(CMAKE_FIND_LIBRARY_PREFIXES "")
+
+
