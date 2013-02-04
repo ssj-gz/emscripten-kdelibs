@@ -451,7 +451,6 @@ install(TARGETS kdecore EXPORT kdelibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_A
 # KAuth policy generator executable
 
 # Compile only if fake backend has not been selected
-
 if (NOT "${KDE4_AUTH_BACKEND_NAME}" STREQUAL "FAKE")
     # KAUTH_POLICY_GEN_SRCS has been generated from auth/ConfigureChecks.cmake
     kde4_add_executable(kauth-policy-gen NOGUI ${KAUTH_POLICY_GEN_SRCS})
@@ -462,7 +461,7 @@ if (NOT "${KDE4_AUTH_BACKEND_NAME}" STREQUAL "FAKE")
     install( TARGETS kauth-policy-gen EXPORT kdelibsToolsTargets DESTINATION ${LIBEXEC_INSTALL_DIR})
 endif (NOT "${KDE4_AUTH_BACKEND_NAME}" STREQUAL "FAKE")
 
-if ( NOT WINCE )
+if ( NOT WINCE AND NOT EMSCRIPTEN)
     ########### next target ###############
 
     # KAuth backend plugin
@@ -491,7 +490,7 @@ if ( NOT WINCE )
                 RUNTIME DESTINATION ${KAUTH_HELPER_PLUGIN_DIR}
         )
     endif (NOT "${KDE4_AUTH_HELPER_BACKEND_NAME}" STREQUAL "FAKE")
-endif ( NOT WINCE )
+endif ( NOT WINCE AND NOT EMSCRIPTEN)
 
 ########### next target ###############
 
