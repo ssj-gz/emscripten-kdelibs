@@ -67,18 +67,22 @@ endif(UNIX AND Q_WS_X11)
 find_package(Perl)
 macro_log_feature(PERL_FOUND "Perl" "Needed for building kdelibs" "http://www.perl.org" TRUE "" "")
 
-find_package(ZLIB)
-macro_log_feature(ZLIB_FOUND "ZLib" "Support for gzip compressed files and data streams" "http://www.zlib.net" TRUE "" "Required by the core KDE libraries and some critical kioslaves")
+# TODO - this is hopefully temporarily - and why isn't it using Qt's own zlib?
+if (NOT EMSCRIPTEN) 
+    find_package(ZLIB)
+    macro_log_feature(ZLIB_FOUND "ZLib" "Support for gzip compressed files and data streams" "http://www.zlib.net" TRUE "" "Required by the core KDE libraries and some critical kioslaves")
+endif()
+
 
 set(STRIGI_MIN_VERSION 0.6.3)
 find_package(Strigi)
 if (WIN32 OR EMSCRIPTEN)
     set (STRIGI_REQUIRED FALSE)
     set (STRIGI_EXTRA_TEXT "")
-else (WIN32)
+else (WIN32 OR EMSCRIPTEN)
     set (STRIGI_REQUIRED TRUE)
     set (STRIGI_EXTRA_TEXT "Required by some critical kioslaves")
-endif (WIN32)
+endif (WIN32 OR EMSCRIPTEN)
 macro_log_feature(STRIGI_FOUND "Strigi" "Desktop indexing and search support" "http://strigi.sourceforge.net" ${STRIGI_REQUIRED} "${STRIGI_MIN_VERSION}" "${STRIGI_EXTRA_TEXT}")
 
 set(LIBATTICA_MIN_VERSION "0.1.90")
