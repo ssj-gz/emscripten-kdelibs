@@ -1677,6 +1677,7 @@ void KStandardDirs::addResourcesFrom_krcdirs()
     if (!QFile::exists(localFile))
         return;
 
+#ifndef EMSCRIPTEN
     QSettings iniFile(localFile, QSettings::IniFormat);
     iniFile.beginGroup(QString::fromLatin1("KStandardDirs"));
     const QStringList resources = iniFile.allKeys();
@@ -1689,6 +1690,9 @@ void KStandardDirs::addResourcesFrom_krcdirs()
         if(path.makeAbsolute())
             addResourceDir(key.toAscii(), path.path(), false);
     }
+#else
+    kWarning() << "Not adding any KStandardDirs resource dirs for Emscripten.";
+#endif
 }
 
 void KStandardDirs::addKDEDefaults()
