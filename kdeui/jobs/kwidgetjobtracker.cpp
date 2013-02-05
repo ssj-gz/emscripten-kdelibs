@@ -616,14 +616,22 @@ void KWidgetJobTracker::Private::ProgressWidget::_k_keepOpenToggled(bool keepOpe
 
 void KWidgetJobTracker::Private::ProgressWidget::_k_openFile()
 {
+#ifndef EMSCRIPTEN
     QProcess::startDetached("kde-open", QStringList() << location.prettyUrl());
+#else
+    kWarning() << "kde-open not supported on Emscripten!";
+#endif
 }
 
 void KWidgetJobTracker::Private::ProgressWidget::_k_openLocation()
 {
     KUrl dirLocation(location);
     dirLocation.setFileName(QString());
+#ifndef EMSCRIPTEN
     QProcess::startDetached("kde-open", QStringList() << dirLocation.prettyUrl());
+#else
+    kWarning() << "kde-open not supported on Emscripten!";
+#endif
 }
 
 void KWidgetJobTracker::Private::ProgressWidget::_k_pauseResumeClicked()
