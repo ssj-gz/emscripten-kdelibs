@@ -43,7 +43,9 @@ check_include_files(sys/time.h    TIME_WITH_SYS_TIME)                  # kdecore
 check_include_files(crt_externs.h HAVE_CRT_EXTERNS_H)                  # kinit, config.h
 
 check_include_files(alloca.h      HAVE_ALLOCA_H)                       # kdecore, khtml
-check_include_files(fstab.h       HAVE_FSTAB_H)                        # kio, kdecore
+if (NOT EMSCRIPTEN)
+    check_include_files(fstab.h       HAVE_FSTAB_H)                        # kio, kdecore
+endif()
 check_include_files(limits.h      HAVE_LIMITS_H)                       # various
 check_include_files(mntent.h      HAVE_MNTENT_H)                       # solid, kio, kdecore
 check_include_files(sysent.h      HAVE_SYSENT_H)                       # kdecore
