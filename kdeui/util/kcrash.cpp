@@ -39,9 +39,11 @@
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <sys/wait.h>
+#ifndef EMSCRIPTEN
 #include <sys/un.h>
+#endif
 #include <sys/socket.h>
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX) & !defined(Q_OS_EMSCRIPTEN)
 #include <sys/prctl.h>
 #endif
 #include <errno.h>
@@ -226,7 +228,9 @@ bool KCrash::isDrKonqiEnabled()
 void
 KCrash::setCrashHandler (HandlerType handler)
 {
-#if defined(Q_OS_WIN)
+#ifdef EMSCRIPTEN
+  return;
+#elif defined(Q_OS_WIN)
   static LPTOP_LEVEL_EXCEPTION_FILTER s_previousExceptionFilter = NULL;
 
   if (handler && !s_previousExceptionFilter) {
@@ -532,6 +536,7 @@ void KCrash::startProcess(int argc, const char *argv[], bool waitAndExit)
 
 static bool startProcessInternal(int argc, const char *argv[], bool waitAndExit, bool directly)
 {
+#ifndef EMSCRIPTEN
     fprintf(stderr, "KCrash: Attempting to start %s %s\n", argv[0], directly ? "directly" : "from kdeinit");
 
     pid_t pid = directly ? startDirectly(argv) : startFromKdeinit(argc, argv);
@@ -562,6 +567,9 @@ static bool startProcessInternal(int argc, const char *argv[], bool waitAndExit,
     }
 
     return (pid > 0); //return true on success
+#else
+    return false;
+#endif
 }
 
 static pid_t startFromKdeinit(int argc, const char *argv[])
@@ -725,6 +733,7 @@ static int read_socket(int sock, char *buffer, int len)
 
 static int openSocket()
 {
+#ifndef EMSCRIPTEN
   kde_socklen_t socklen;
   int s;
   struct sockaddr_un server;
@@ -815,6 +824,7 @@ static int openSocket()
      return -1;
   }
   return s;
+#endif
 }
 
 #endif // Q_OS_UNIX
