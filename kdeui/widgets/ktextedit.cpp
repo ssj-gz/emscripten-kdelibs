@@ -30,9 +30,11 @@
 #include <QScrollBar>
 #include <QTextCursor>
 #include <QTextDocumentFragment>
+#ifndef EMSCRIPTEN
 #include <QDBusInterface>
 #include <QDBusConnection>
 #include <QDBusConnectionInterface>
+#endif
 
 #include <configdialog.h>
 #include <dialog.h>
@@ -531,6 +533,7 @@ QMenu *KTextEdit::mousePopupMenu()
 
 void KTextEdit::slotSpeakText()
 {
+#ifndef EMSCRIPTEN
     // If KTTSD not running, start it.
     if (!QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.kttsd"))
     {
@@ -548,6 +551,7 @@ void KTextEdit::slotSpeakText()
     else
         text = toPlainText();
     ktts.asyncCall("say", text, 0);
+#endif
 }
 
 void KTextEdit::contextMenuEvent(QContextMenuEvent *event)
