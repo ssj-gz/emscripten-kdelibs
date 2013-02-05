@@ -406,10 +406,10 @@ qt4_add_dbus_interface(kdeui_LIB_SRCS ${statusnotifierwatcher_xml} statusnotifie
 set(notifications_xml ${CMAKE_CURRENT_SOURCE_DIR}/notifications/org.freedesktop.Notifications.xml)
 qt4_add_dbus_interface(kdeui_LIB_SRCS ${notifications_xml} notifications_interface)
 
-if(NOT WINCE AND NOT EMSCRIPTEN)
+if(NOT WINCE)
 qt4_add_dbus_adaptor(kdeui_LIB_SRCS     ${CMAKE_CURRENT_SOURCE_DIR}/notifications/org.kde.StatusNotifierItem.xml
                      ${CMAKE_CURRENT_SOURCE_DIR}/notifications/kstatusnotifieritemdbus_p.h KStatusNotifierItemDBus)
-endif(NOT WINCE AND NOT EMSCRIPTEN)
+endif(NOT WINCE)
 
 set(kglobalaccel_xml ${CMAKE_CURRENT_SOURCE_DIR}/shortcuts/org.kde.KGlobalAccel.xml)
 set_source_files_properties(${kglobalaccel_xml} PROPERTIES INCLUDE "kglobalshortcutinfo_p.h")
