@@ -18,6 +18,7 @@
 
 #include "kglobalshortcutinfo.h"
 #include "kglobalshortcutinfo_p.h"
+#include <QtCore/QStringList>
 
 KGlobalShortcutInfo::KGlobalShortcutInfo()
         :   d(new KGlobalShortcutInfoPrivate)

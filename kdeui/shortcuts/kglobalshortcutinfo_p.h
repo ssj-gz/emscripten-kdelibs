@@ -37,6 +37,7 @@ class KGlobalShortcutInfoPrivate
     QList<QKeySequence> defaultKeys;
     };
 
+#ifndef EMSCRIPTEN
 KDEUI_EXPORT QDBusArgument &operator<< (
         QDBusArgument &argument,
         const KGlobalShortcutInfo &shortcut);
@@ -44,6 +45,7 @@ KDEUI_EXPORT QDBusArgument &operator<< (
 KDEUI_EXPORT const QDBusArgument &operator>> (
         const QDBusArgument &argument,
         KGlobalShortcutInfo &shortcut);
+#endif
 
 
 // these should be in kglobalaccel_interface.h. But this way it's easier to

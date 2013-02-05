@@ -26,6 +26,7 @@
 #ifndef EMSCRIPTEN
 #include <QtDBus/QDBusArgument>
 #endif
+#include <QtCore/QMetaType>
 
 
 class KGlobalShortcutInfoPrivate;
