@@ -322,7 +322,7 @@ else(Q_WS_MAC AND MAC_USE_OSXKEYCHAIN)
   set(kdeui_LIB_SRCS ${kdeui_LIB_SRCS} util/kwallet.cpp)
 endif(Q_WS_MAC AND MAC_USE_OSXKEYCHAIN)
 
-if(NOT WINCE)
+if(NOT WINCE AND NOT EMSCRIPTEN)
 set(kdeui_LIB_SRCS
  ${kdeui_LIB_SRCS}
  dialogs/kdeprintdialog.cpp
@@ -331,7 +331,7 @@ set(kdeui_LIB_SRCS
  notifications/kstatusnotifieritemdbus_p.cpp
  notifications/ksystemtrayicon.cpp
 )
-endif(NOT WINCE)
+endif(NOT WINCE AND NOT EMSCRIPTEN)
 
 
 
