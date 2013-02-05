@@ -169,7 +169,6 @@ set(kdeui_LIB_SRCS
  jobs/kstatusbarjobtracker.cpp
  kernel/kapplication.cpp
  kernel/kclipboard.cpp
- kernel/ksessionmanager.cpp
  kernel/kstyle.cpp
  kernel/kstartupinfo.cpp
  kernel/kglobalsettings.cpp
@@ -300,6 +299,7 @@ if (NOT EMSCRIPTEN)
     set(kdeui_LIB_SRCS
      ${kdeui_LIB_SRCS}
      kernel/kuniqueapplication.cpp
+     kernel/ksessionmanager.cpp
      jobs/kuiserverjobtracker.cpp)
 endif()
 
