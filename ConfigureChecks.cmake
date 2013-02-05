@@ -102,7 +102,9 @@ check_function_exists(getpagesize      HAVE_GETPAGESIZE)              # khtml
 if(NOT APPLE)
    check_function_exists(fdatasync     HAVE_FDATASYNC)                # kdecore, kate
 endif(NOT APPLE)
-check_function_exists(mmap             HAVE_MMAP)                     # kdecore, khtml
+if (NOT EMSCRIPTEN)
+    check_function_exists(mmap             HAVE_MMAP)                     # kdecore, khtml
+endif()
 
 if(NOT WIN32)
   # we don't have it on windows but need to export it to be backward compatible
