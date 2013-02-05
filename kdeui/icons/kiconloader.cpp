@@ -43,7 +43,10 @@
 #include <QtGui/QPainter>
 #include <QtGui/QPixmap>
 #include <QtGui/QPixmapCache>
-#ifndef _WIN32_WCE
+#if defined(_WIN32_WCE) || defined(EMSCRIPTEN)
+#define NO_SVG
+#endif
+#ifndef NO_SVG
 #include <QtSvg/QSvgRenderer>
 #endif
 
@@ -793,7 +796,7 @@ QImage KIconLoaderPrivate::createIconImage(const QString &path, int size)
     }
     else
     {
-#ifndef _WIN32_WCE
+#ifndef NO_SVG
         QSvgRenderer renderer(path, q);
 
         if (renderer.isValid()) {
