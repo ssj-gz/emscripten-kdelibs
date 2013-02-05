@@ -31,7 +31,9 @@
 
 #include <QtCore/QAbstractListModel>
 #include <QtGui/QPixmap>
+#ifndef EMSCRIPTEN
 #include <QtNetwork/QNetworkReply>
+#endif
 
 // Forward declarations to make Attica-related members work
 namespace Attica {
@@ -65,7 +67,9 @@ public:
 private Q_SLOTS:
     void onProvidersLoaded();
     void onPersonJobFinished( Attica::BaseJob *job );
+#ifndef EMSCRIPTEN
     void onAvatarJobFinished( QNetworkReply *reply );
+#endif
     void onOcsLinksJobFinished( KAboutApplicationPersonIconsJob *job );
 
 private:
@@ -219,7 +223,9 @@ signals:
     void finished( KAboutApplicationPersonIconsJob *job);
 
 private Q_SLOTS:
+#ifndef EMSCRIPTEN
     void onJobFinished( QNetworkReply *reply );
+#endif
 
 private:
     void getIcons( int i );
@@ -228,7 +234,9 @@ private:
     KAboutApplicationPersonModel *m_model;
     QList< KAboutApplicationPersonProfileOcsLink > m_ocsLinks;
 
+#ifndef EMSCRIPTEN
     QNetworkAccessManager *m_manager;
+#endif
 };
 
 } //namespace KDEPrivate
