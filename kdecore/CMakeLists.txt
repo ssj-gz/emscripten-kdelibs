@@ -371,11 +371,11 @@ if (NOT EMSCRIPTEN)
     set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS} util/kpluginloader.cpp network/klocalsocket.cpp network/ksocketfactory.cpp network/ksslcertificatemanager.cpp network/ktcpsocket.cpp util/klauncher_iface.cpp util/klibrary.cpp util/qtest_kde.cpp)
 endif()
 
-if(NOT KDE_NO_DEPRECATED)
+if(NOT KDE_NO_DEPRECATED AND NOT EMSCRIPTEN)
     set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS}
        util/klibloader.cpp
     )
-endif(NOT KDE_NO_DEPRECATED)
+endif(NOT KDE_NO_DEPRECATED AND NOT EMSCRIPTEN)
 
 if(NOT WIN32)
     set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS} util/kshareddatacache.cpp)
