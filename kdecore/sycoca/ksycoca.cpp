@@ -36,8 +36,10 @@
 #include <QtCore/QCoreApplication>
 #include <QtCore/QFile>
 #include <QtCore/QBuffer>
+#ifndef EMSCRIPTEN
 #include <QProcess>
 #include <QtDBus/QtDBus>
+#endif
 
 #include <config.h>
 
@@ -180,10 +182,12 @@ K_GLOBAL_STATIC(KSycocaSingleton, ksycocaInstance)
 KSycoca::KSycoca()
   : d(new KSycocaPrivate)
 {
+#ifndef EMSCRIPTEN
     QDBusConnection::sessionBus().connect(QString(), QString(),
                                           QString::fromLatin1("org.kde.KSycoca"),
                                           QString::fromLatin1("notifyDatabaseChanged"),
                                           this, SLOT(notifyDatabaseChanged(QStringList)));
+#endif
 }
 
 bool KSycocaPrivate::openDatabase(bool openDummyIfNotFound)
@@ -407,6 +411,10 @@ bool KSycocaPrivate::checkVersion()
 // and past the version number.
 bool KSycocaPrivate::checkDatabase(BehaviorsIfNotFound ifNotFound)
 {
+#ifdef EMSCRIPTEN
+    kWarning() << "checkDatabase not supported on Emscripten";
+    return false;
+#else
     if (databaseStatus == DatabaseOK) {
         if (checkVersion()) // we know the version is ok, but we must rewind the stream anyway
             return true;
@@ -454,6 +462,7 @@ bool KSycocaPrivate::checkDatabase(BehaviorsIfNotFound ifNotFound)
     }
 
     return false;
+#endif
 }
 
 QDataStream * KSycoca::findFactory(KSycocaFactoryId id)
@@ -564,12 +573,16 @@ void KSycoca::flagError()
         return;
     d->readError = true;
     if (s_autoRebuild) {
+#ifndef EMSCRIPTEN
         // Rebuild the damned thing.
         if (QProcess::execute(KStandardDirs::findExe(QString::fromLatin1(KBUILDSYCOCA_EXENAME))) != 0)
             qWarning("ERROR: Running %s failed", KBUILDSYCOCA_EXENAME);
         // Old comment, maybe not true anymore:
         // Do not wait until the DBUS signal from kbuildsycoca here.
         // It deletes m_str which is a problem when flagError is called during the KSycocaFactory ctor...
+#else
+        kWarning() << "autoRebuild not supported for Emscripten!";
+#endif
     }
 }
 
