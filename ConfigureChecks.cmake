@@ -225,7 +225,9 @@ endif (UNIX)
 #check_function_exists(crypt "" HAVE_CRYPT)
 #set(CMAKE_REQUIRED_LIBRARIES)
 
-check_function_exists(getmntinfo HAVE_GETMNTINFO)        # kdecore, kio
+if (NOT EMSCRIPTEN)
+    check_function_exists(getmntinfo HAVE_GETMNTINFO)        # kdecore, kio
+endif()
 check_function_exists(initgroups HAVE_INITGROUPS)        # kde3support/k3process, kdesu
 check_function_exists(mkstemps   HAVE_MKSTEMPS)          # dcop, kdecore/fakes.c
 check_function_exists(mkstemp    HAVE_MKSTEMP)           # kdecore/fakes.c
