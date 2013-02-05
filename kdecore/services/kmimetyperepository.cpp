@@ -750,6 +750,7 @@ static int mimeDataBaseVersion()
         return -1;
     }
 
+#ifndef EMSCRIPTEN
     QProcess smi;
     smi.start(umd, QStringList() << QString::fromLatin1("-v"));
     smi.waitForStarted();
@@ -761,6 +762,9 @@ static int mimeDataBaseVersion()
     }
 
     kWarning(servicesDebugArea()) << "Unexpected version scheme from update-mime-database -v: got" << out;
+#else
+    kWarning(servicesDebugArea()) << "update-mime-database no supported for Emscripten!";
+#endif
     return -1;
 }
 
