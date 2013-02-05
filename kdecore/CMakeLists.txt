@@ -248,15 +248,6 @@ set(kdecore_LIB_SRCS
    kernel/kcomponentdata.cpp
    kernel/kstandarddirs.cpp
    kernel/ktoolinvocation.cpp
-   auth/kauthaction.cpp
-   auth/kauthactionreply.cpp
-   auth/kauthactionwatcher.cpp
-   auth/AuthBackend.cpp
-   auth/BackendsManager.cpp
-   auth/HelperProxy.cpp
-   auth/kauthhelpersupport.cpp
-   auth/backends/fake/FakeBackend.cpp
-   auth/backends/fakehelper/FakeHelperProxy.cpp
    services/kfoldermimetype.cpp
    services/kmimetypefactory.cpp
    services/kmimemagicrule.cpp
@@ -291,7 +282,7 @@ set(kdecore_LIB_SRCS
 )
 
 if (NOT EMSCRIPTEN)
-    set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS} io/kdebugdbusiface.cpp io/kprocess.cpp)
+    set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS} io/kdebugdbusiface.cpp io/kprocess.cpp auth/kauthaction.cpp auth/kauthactionreply.cpp auth/kauthactionwatcher.cpp auth/AuthBackend.cpp auth/BackendsManager.cpp auth/HelperProxy.cpp auth/kauthhelpersupport.cpp auth/backends/fake/FakeBackend.cpp auth/backends/fakehelper/FakeHelperProxy.cpp)
 endif()
 
 if (NOT KDECORE_NO_KDE3SUPPORT)
