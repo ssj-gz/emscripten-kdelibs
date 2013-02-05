@@ -28,7 +28,9 @@
 #include "kpastetextaction.h"
 
 #include <QtGui/QClipboard>
+#ifndef EMSCRIPTEN
 #include <QtDBus/QtDBus>
+#endif
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -101,12 +103,14 @@ void KPasteTextActionPrivate::_k_menuAboutToShow()
 {
     m_popup->clear();
     QStringList list;
+#ifndef EMSCRIPTEN
     QDBusInterface klipper("org.kde.klipper", "/klipper", "org.kde.klipper.klipper");
     if (klipper.isValid()) {
       QDBusReply<QStringList> reply = klipper.call("getClipboardHistoryMenu");
       if (reply.isValid())
         list = reply;
     }
+#endif
     QString clipboardText = qApp->clipboard()->text(QClipboard::Clipboard);
     if (list.isEmpty())
         list << clipboardText;
@@ -127,6 +131,7 @@ void KPasteTextActionPrivate::_k_menuAboutToShow()
 
 void KPasteTextActionPrivate::_k_slotTriggered(QAction* action)
 {
+#ifndef EMSCRIPTEN
     QDBusInterface klipper("org.kde.klipper", "/klipper", "org.kde.klipper.klipper");
     if (klipper.isValid()) {
       QDBusReply<QString> reply = klipper.call("getClipboardHistoryItem",
@@ -138,6 +143,7 @@ void KPasteTextActionPrivate::_k_slotTriggered(QAction* action)
       if (reply.isValid())
         kDebug(129) << "Clipboard: " << qApp->clipboard()->text(QClipboard::Clipboard);
     }
+#endif
 }
 
 /* vim: et sw=2 ts=2
