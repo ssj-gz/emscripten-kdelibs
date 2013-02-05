@@ -167,7 +167,6 @@ set(kdeui_LIB_SRCS
  jobs/kabstractwidgetjobtracker.cpp
  jobs/kwidgetjobtracker.cpp
  jobs/kstatusbarjobtracker.cpp
- jobs/kuiserverjobtracker.cpp
  kernel/kapplication.cpp
  kernel/kclipboard.cpp
  kernel/kuniqueapplication.cpp
@@ -297,6 +296,12 @@ set(kdeui_LIB_SRCS
  xmlgui/kxmlguifactory_p.cpp
  xmlgui/kxmlguiversionhandler.cpp
 )
+
+if (NOT EMSCRIPTEN)
+    set(kdeui_LIB_SRCS
+     ${kdeui_LIB_SRCS}
+     jobs/kuiserverjobtracker.cpp)
+endif()
 
 if(NOT KDE_NO_DEPRECATED)
 set(kdeui_LIB_SRCS
