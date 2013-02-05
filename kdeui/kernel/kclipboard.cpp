@@ -22,7 +22,9 @@
 #include "kglobalsettings.h"
 
 #include <QtCore/QMimeData>
+#ifndef EMSCRIPTEN
 #include <QtDBus/QtDBus>
+#endif
 #include <QtGui/QApplication>
 #include <kconfiggroup.h>
 
@@ -100,8 +102,10 @@ void KClipboardSynchronizer::Private::setupSignals()
         connect( clip, SIGNAL(dataChanged()),
                  q, SLOT(_k_slotClipboardChanged()));
 
+#ifndef EMSCRIPTEN
     QDBusConnection::sessionBus().connect( QString(), "/KGlobalSettings", "org.kde.KGlobalSettings",
                                            "notifyChange", q, SLOT(_k_slotNotifyChange(int,int)) );
+#endif
 }
 
 void KClipboardSynchronizer::Private::_k_slotSelectionChanged()
