@@ -60,7 +60,9 @@ public:
     void _k_updateUrl();
 
     KBugReport *q;
+#ifndef EMSCRIPTEN
     QProcess * m_process;
+#endif
     const KAboutData * m_aboutData;
 
     KTextEdit * m_lineedit;
@@ -98,7 +100,9 @@ KBugReport::KBugReport( QWidget * _parent, bool modal, const KAboutData *aboutDa
   d->m_aboutData = aboutData ? aboutData
       : (KGlobal::activeComponent().isValid() ? KGlobal::activeComponent().aboutData()
                                   : KGlobal::mainComponent().aboutData());
+#ifndef EMSCRIPTEN
   d->m_process = 0;
+#endif
   QWidget * parent = new QWidget(this);
   d->submitBugWeb = false;
 
@@ -361,6 +365,7 @@ void KBugReportPrivate::_k_appChanged(int i)
 
 void KBugReportPrivate::_k_slotConfigureEmail()
 {
+#ifndef EMSCRIPTEN
   if (m_process) return;
   m_process = new QProcess;
   QObject::connect( m_process, SIGNAL(finished(int,QProcess::ExitStatus)), q, SLOT(_k_slotSetFrom()) );
@@ -373,12 +378,17 @@ void KBugReportPrivate::_k_slotConfigureEmail()
     return;
   }
   m_configureEmail->setEnabled(false);
+#else
+  kWarning() << "Bug report stuff not supported on Emscripten";
+#endif
 }
 
 void KBugReportPrivate::_k_slotSetFrom()
 {
+#ifndef EMSCRIPTEN
   delete m_process;
   m_process = 0;
+#endif
   m_configureEmail->setEnabled(true);
 
   // ### KDE4: why oh why is KEMailSettings in kio?
@@ -523,6 +533,7 @@ QString KBugReport::text() const
 
 bool KBugReport::sendBugReport()
 {
+#ifndef EMSCRIPTEN
   QString recipient ( d->m_aboutData ?
     d->m_aboutData->bugAddress() :
     QString::fromLatin1("submit@bugs.kde.org") );
@@ -557,6 +568,10 @@ bool KBugReport::sendBugReport()
       return false;
   }
   return true;
+#else
+  kWarning() << "Bug report stuff not supported on Emscripten";
+  return false;
+#endif
 }
 
 
