@@ -195,14 +195,18 @@ public:
      *  handling of session management with KSessionManager.
      * @internal
      */
+#ifndef EMSCRIPTEN
   void commitData( QSessionManager& sm );
+#endif
 
     /**
      * Reimplemented for internal purposes, mainly the highlevel
      *  handling of session management with KSessionManager.
      * @internal
      */
+#ifndef EMSCRIPTEN
   void saveState( QSessionManager& sm );
+#endif
 
   /**
    * Returns true if the application is currently saving its session

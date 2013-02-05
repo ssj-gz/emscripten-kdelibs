@@ -327,6 +327,7 @@ void KApplicationPrivate::_k_checkAppStartedSlot()
  */
 QString KApplicationPrivate::sessionConfigName() const
 {
+#ifndef EMSCRIPTEN
 #ifdef QT_NO_SESSIONMANAGER
 #error QT_NO_SESSIONMANAGER was set, this will not compile. Reconfigure Qt with Session management support.
 #endif
@@ -334,6 +335,10 @@ QString KApplicationPrivate::sessionConfigName() const
     if ( sessKey.isEmpty() && !sessionKey.isEmpty() )
         sessKey = sessionKey;
     return QString(QLatin1String("session/%1_%2_%3")).arg(q->applicationName()).arg(q->sessionId()).arg(sessKey);
+#else
+    kWarning() << "Session management not supported on Emscripten";
+    return QString();
+#endif
 }
 
 #ifdef Q_WS_X11
@@ -653,6 +658,7 @@ void KApplication::enableSessionManagement() {
 #endif
 }
 
+#ifndef EMSCRIPTEN
 void KApplication::commitData( QSessionManager& sm )
 {
     d->session_save = true;
@@ -701,6 +707,7 @@ commitDataRestart:
         sm.setRestartHint( QSessionManager::RestartIfRunning );
     d->session_save = false;
 }
+#endif
 
 #ifdef Q_WS_X11
 static void checkRestartVersion( QSessionManager& sm )
@@ -736,6 +743,7 @@ static void checkRestartVersion( QSessionManager& sm )
 }
 #endif // Q_WS_X11
 
+#ifndef EMSCRIPTEN
 void KApplication::saveState( QSessionManager& sm )
 {
     d->session_save = true;
@@ -814,6 +822,7 @@ void KApplication::saveState( QSessionManager& sm )
 #endif
     d->session_save = false;
 }
+#endif
 
 bool KApplication::sessionSaving() const
 {
