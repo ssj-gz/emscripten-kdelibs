@@ -305,10 +305,6 @@ if (NOT KDECORE_NO_KDE3SUPPORT)
 endif (NOT KDECORE_NO_KDE3SUPPORT)
 
 set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS}
-   network/klocalsocket.cpp
-   network/ksocketfactory.cpp
-   network/ksslcertificatemanager.cpp
-   network/ktcpsocket.cpp
    localization/kcatalog.cpp
    localization/kcurrencycode.cpp
    localization/kcharsets.cpp
@@ -375,7 +371,7 @@ set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS}
 )
 
 if (NOT EMSCRIPTEN)
-    set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS} util/kpluginloader.cpp)
+    set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS} util/kpluginloader.cpp network/klocalsocket.cpp network/ksocketfactory.cpp network/ksslcertificatemanager.cpp network/ktcpsocket.cpp)
 endif()
 
 if(NOT KDE_NO_DEPRECATED)
