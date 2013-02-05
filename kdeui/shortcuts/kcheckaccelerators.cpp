@@ -164,9 +164,13 @@ bool KCheckAccelerators::eventFilter(QObject* obj, QEvent* e)
             }
             else
             {
+#ifndef EMSCRIPTEN
                 QProcess* script=new QProcess(this);
                 script->start(copyWidgetTextCommand.arg(text).arg(KGlobal::activeComponent().catalogName()));
                 connect(script,SIGNAL(finished(int,QProcess::ExitStatus)),script,SLOT(deleteLater()));
+#else
+                kWarning() << "Something or other - I have no idea what - not supported in Emscripten!";
+#endif
             }
             e->accept();
             return true;
