@@ -117,7 +117,9 @@ check_function_exists(_NSGetEnviron   HAVE_NSGETENVIRON)              # kinit, c
 check_function_exists(gettimeofday    HAVE_GETTIMEOFDAY)              # testkjs
 check_function_exists(getgrouplist    HAVE_GETGROUPLIST)              # kio
 
-check_library_exists(volmgt volmgt_running "" HAVE_VOLMGT)            # various
+if (NOT EMSCRIPTEN)
+    check_library_exists(volmgt volmgt_running "" HAVE_VOLMGT)            # various
+endif()
 
 # Check for libresolv
 # e.g. on slackware 9.1 res_init() is only a define for __res_init, so we check both, Alex
