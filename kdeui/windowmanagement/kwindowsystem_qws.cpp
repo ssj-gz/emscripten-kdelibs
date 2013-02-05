@@ -26,7 +26,9 @@
 #include <QtGui/QBitmap>
 #include <QDesktopWidget>
 #include <QtGui/QDialog>
+#ifndef EMSCRIPTEN
 #include <QtDBus/QtDBus>
+#endif
 #include <kdebug.h>
 
 class KWindowSystemStaticContainer {
