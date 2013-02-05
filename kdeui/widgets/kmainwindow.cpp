@@ -26,11 +26,15 @@
 
 #include "kmainwindow.h"
 #include "kmainwindow_p.h"
+#ifndef EMSCRIPTEN
 #include "kmainwindowiface_p.h"
+#endif
 #include "ktoolbarhandler_p.h"
 #include "kcmdlineargs.h"
 #include "ktoggleaction.h"
+#ifndef EMSCRIPTEN
 #include "ksessionmanager.h"
+#endif
 #include "kstandardaction.h"
 
 #include <QtCore/QList>
@@ -129,6 +133,7 @@ bool DockResizeListener::eventFilter(QObject *watched, QEvent *event)
     return QObject::eventFilter(watched, event);
 }
 
+#ifndef EMSCRIPTEN
 class KMWSessionManager : public KSessionManager
 {
 public:
@@ -211,6 +216,7 @@ public:
 };
 
 K_GLOBAL_STATIC(KMWSessionManager, ksm)
+#endif
 K_GLOBAL_STATIC(QList<KMainWindow*>, sMemberList)
 static bool being_first = true;
 
@@ -257,8 +263,10 @@ void KMainWindowPrivate::init(KMainWindow *_q)
     QObject::connect(KGlobalSettings::self(), SIGNAL(settingsChanged(int)),
                      q, SLOT(_k_slotSettingsChanged(int)));
 
+#ifndef EMSCRIPTEN
     // force KMWSessionManager creation - someone a better idea?
     ksm->dummyInit();
+#endif
 
     sMemberList->append( q );
 
@@ -379,11 +387,13 @@ void KMainWindowPrivate::polish(KMainWindow *q)
             dbusName[i] = QLatin1Char('_');
     }
 
+#ifndef EMSCRIPTEN
     QDBusConnection::sessionBus().registerObject(dbusName, q, QDBusConnection::ExportScriptableSlots |
                                        QDBusConnection::ExportScriptableProperties |
                                        QDBusConnection::ExportNonScriptableSlots |
                                        QDBusConnection::ExportNonScriptableProperties |
                                        QDBusConnection::ExportAdaptors);
+#endif
 }
 
 void KMainWindowPrivate::setSettingsDirty(CallCompression callCompression)
@@ -502,8 +512,10 @@ KMenu* KMainWindow::customHelpMenu( bool showWhatsThis )
 
 bool KMainWindow::canBeRestored( int number )
 {
+#ifndef EMSCRIPTEN
     if ( !qApp->isSessionRestored() )
         return false;
+#endif
     KConfig *config = kapp->sessionConfig();
     if ( !config )
         return false;
@@ -515,8 +527,10 @@ bool KMainWindow::canBeRestored( int number )
 
 const QString KMainWindow::classNameOfToplevel( int number )
 {
+#ifndef EMSCRIPTEN
     if ( !qApp->isSessionRestored() )
         return QString();
+#endif
     KConfig *config = kapp->sessionConfig();
     if ( !config )
         return QString();
