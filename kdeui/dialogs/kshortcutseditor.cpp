@@ -618,7 +618,7 @@ more important things):
 void KShortcutsEditorPrivate::printShortcuts() const
 {
 // One cant print on wince
-#ifndef _WIN32_WCE
+#if !(defined(_WIN32_WCE)) && !(defined(QT_NO_PRINTER))
     QTreeWidgetItem* root = ui.list->invisibleRootItem();
     QTextDocument doc;
     doc.setDefaultFont(KGlobalSettings::generalFont());
