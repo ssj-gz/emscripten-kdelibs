@@ -286,7 +286,6 @@ set(kdeui_LIB_SRCS
  widgets/nestedlisthelper.cpp
  xmlgui/kxmlguibuilder.cpp
  xmlgui/kxmlguiwindow.cpp
- xmlgui/kmainwindowiface.cpp
  xmlgui/kmenumenuhandler_p.cpp
  xmlgui/ktoolbarhandler.cpp
  xmlgui/kxmlguiclient.cpp
@@ -300,6 +299,7 @@ if (NOT EMSCRIPTEN)
      ${kdeui_LIB_SRCS}
      kernel/kuniqueapplication.cpp
      kernel/ksessionmanager.cpp
+     xmlgui/kmainwindowiface.cpp
      jobs/kuiserverjobtracker.cpp)
 endif()
 
