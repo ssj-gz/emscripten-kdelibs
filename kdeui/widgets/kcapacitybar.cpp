@@ -93,7 +93,9 @@ void KCapacityBar::setText(const QString &text)
         updateGeometry();
     }
 
+#ifndef EMSCRIPTEN
     setAccessibleName(text);
+#endif
 
     update();
 }
