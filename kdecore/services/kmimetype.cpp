@@ -33,6 +33,7 @@
 
 #include <QtCore/QFile>
 #include <QtCore/QStack>
+#include <QtXml/QXmlStreamReader>
 #ifndef EMSCRIPTEN
 #include <QtDBus/QtDBus>
 #endif
