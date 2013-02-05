@@ -25,8 +25,10 @@
 
 #include <memory>
 
+#ifndef EMSCRIPTEN
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusMetaType>
+#endif
 #ifdef Q_WS_X11
 #include <QtGui/QX11Info>
 #include <netwm_def.h>
@@ -41,6 +43,7 @@
 #include "kmessagebox.h"
 #include "kshortcut.h"
 
+#ifndef EMSCRIPTEN
 org::kde::kglobalaccel::Component *KGlobalAccelPrivate::getComponent(const QString &componentUnique, bool remember = false)
 {
     // Check if we already have this component
@@ -97,6 +100,7 @@ org::kde::kglobalaccel::Component *KGlobalAccelPrivate::getComponent(const QStri
 
     return component;
 }
+#endif
 
 
 
@@ -105,9 +109,12 @@ KGlobalAccelPrivate::KGlobalAccelPrivate(KGlobalAccel *q)
 #ifndef KDE_NO_DEPRECATED
         enabled(true),
 #endif
+#ifndef EMSCRIPTEN
         iface("org.kde.kglobalaccel", "/kglobalaccel", QDBusConnection::sessionBus()),
+#endif
         q(q)
 {
+#ifndef EMSCRIPTEN
     // Make sure kded is running. The iface declaration above somehow
     // works anyway.
     QDBusConnectionInterface* bus = QDBusConnection::sessionBus().interface();
@@ -128,6 +135,7 @@ KGlobalAccelPrivate::KGlobalAccelPrivate(KGlobalAccel *q)
                                                            q);
     q->connect(watcher, SIGNAL(serviceOwnerChanged(QString,QString,QString)),
                      q, SLOT(_k_serviceOwnerChanged(QString,QString,QString)));
+#endif
 }
 
 
@@ -145,6 +153,7 @@ void KGlobalAccelPrivate::readComponentData(const KComponentData &componentData)
 KGlobalAccel::KGlobalAccel()
     : d(new KGlobalAccelPrivate(this))
 {
+#ifndef EMSCRIPTEN
     qDBusRegisterMetaType<QList<int> >();
     qDBusRegisterMetaType<QList<QStringList> >();
     qDBusRegisterMetaType<KGlobalShortcutInfo>();
@@ -156,6 +165,7 @@ KGlobalAccel::KGlobalAccel()
     if (KGlobal::hasMainComponent()) {
         d->readComponentData( KGlobal::mainComponent() );
     }
+#endif
 
 }
 
@@ -173,27 +183,37 @@ void KGlobalAccel::activateGlobalShortcutContext(
 {
     Q_UNUSED(contextFriendly);
     // TODO: provide contextFriendly
+#ifndef EMSCRIPTEN
     self()->d->iface.activateGlobalShortcutContext(component.aboutData()->programName(), contextUnique);
+#endif
 }
 
 
 // static
 bool KGlobalAccel::cleanComponent(const QString &componentUnique)
 {
+#ifndef EMSCRIPTEN
     org::kde::kglobalaccel::Component* component = self()->getComponent(componentUnique);
     if (!component) return false;
 
     return component->cleanUp();
+#else
+    return false;
+#endif
 }
 
 
 // static
 bool KGlobalAccel::isComponentActive(const QString &componentUnique)
 {
+#ifndef EMSCRIPTEN
     org::kde::kglobalaccel::Component* component = self()->getComponent(componentUnique);
     if (!component) return false;
 
     return component->isActive();
+#else
+    return false;
+#endif
 }
 
 
@@ -204,11 +224,12 @@ bool KGlobalAccel::isEnabled() const
 }
 #endif
 
-
+#ifndef EMSCRIPTEN
 org::kde::kglobalaccel::Component *KGlobalAccel::getComponent(const QString &componentUnique)
 {
     return d->getComponent(componentUnique);
 }
+#endif
 
 
 #ifndef KDE_NO_DEPRECATED
@@ -254,7 +275,9 @@ void KGlobalAccelPrivate::doRegister(KAction *action)
 
     nameToAction.insertMulti(actionId.at(KGlobalAccel::ActionUnique), action);
     actions.insert(action);
+#ifndef EMSCRIPTEN
     iface.doRegister(actionId);
+#endif
 }
 
 
@@ -274,6 +297,7 @@ void KGlobalAccelPrivate::remove(KAction *action, Removal removal)
     nameToAction.remove(actionId.at(KGlobalAccel::ActionUnique), action);
     actions.remove(action);
 
+#ifndef EMSCRIPTEN
     if (removal == UnRegister) {
         // Complete removal of the shortcut is requested
         // (forgetGlobalShortcut)
@@ -288,11 +312,13 @@ void KGlobalAccelPrivate::remove(KAction *action, Removal removal)
                 : iface.setInactive(actionId);
         }
     }
+#endif
 }
 
 
 void KGlobalAccelPrivate::updateGlobalShortcut(KAction *action, uint flags)
 {
+#ifndef EMSCRIPTEN
     // No action or no objectname -> Do nothing
     // KAction::setGlobalShortcut informs the user
     if (!action || action->objectName().isEmpty()) {
@@ -354,6 +380,7 @@ void KGlobalAccelPrivate::updateGlobalShortcut(KAction *action, uint flags)
         iface.setShortcut(actionId, intListFromShortcut(defaultShortcut),
                           setterFlags | IsDefault);
     }
+#endif
 }
 
 
@@ -519,13 +546,21 @@ QStringList KGlobalAccel::findActionNameSystemwide(const QKeySequence &seq)
 
 QList<KGlobalShortcutInfo> KGlobalAccel::getGlobalShortcutsByKey(const QKeySequence &seq)
 {
+#ifndef EMSCRIPTEN
     return self()->d->iface.getGlobalShortcutsByKey(seq[0]);
+#else
+    return QList<KGlobalShortcutInfo>();
+#endif
 }
 
 
 bool KGlobalAccel::isGlobalShortcutAvailable(const QKeySequence &seq, const QString &comp)
 {
+#ifndef EMSCRIPTEN
         return self()->d->iface.isGlobalShortcutAvailable(seq[0], comp);
+#else
+        return false;
+#endif
 }
 
 
@@ -592,6 +627,7 @@ bool KGlobalAccel::promptStealShortcutSystemwide(
 //static
 void KGlobalAccel::stealShortcutSystemwide(const QKeySequence &seq)
 {
+#ifndef EMSCRIPTEN
     //get the shortcut, remove seq, and set the new shortcut
     const QStringList actionId = self()->d->iface.action(seq[0]);
     if (actionId.size() < 4) // not a global shortcut
@@ -603,6 +639,7 @@ void KGlobalAccel::stealShortcutSystemwide(const QKeySequence &seq)
             sc[i] = 0;
 
     self()->d->iface.setForeignShortcut(actionId, sc);
+#endif
 }
 
 #include "kglobalaccel.moc"
