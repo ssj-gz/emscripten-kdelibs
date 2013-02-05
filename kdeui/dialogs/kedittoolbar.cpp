@@ -357,7 +357,9 @@ public:
         m_componentData = cData;
         m_isPart   = false;
         m_helpArea = 0L;
+#ifndef EMSCRIPTEN
         m_kdialogProcess = 0;
+#endif
         // We want items with an icon to align with items without icon
         // So we use an empty QPixmap for that
         const int iconSize = widget->style()->pixelMetric(QStyle::PM_SmallIconSize);
@@ -486,7 +488,9 @@ public:
     QLabel * m_helpArea;
     KPushButton* m_changeIcon;
     KPushButton* m_changeIconText;
+#ifndef EMSCRIPTEN
     KProcess* m_kdialogProcess;
+#endif
     bool m_isPart : 1;
     bool m_hasKDialog : 1;
     bool m_loadedOnce : 1;
@@ -1516,6 +1520,7 @@ void KEditToolBarWidgetPrivate::updateLocal(QDomElement& elem)
 
 void KEditToolBarWidgetPrivate::slotChangeIcon()
 {
+#ifndef EMSCRIPTEN
   // We can't use KIconChooser here, since it's in libkio
   // ##### KDE4: reconsider this, e.g. move KEditToolBar to libkio,
   // ##### or better, dlopen libkfile from here like kio does.
@@ -1553,6 +1558,9 @@ void KEditToolBarWidgetPrivate::slotChangeIcon()
 
   QObject::connect( m_kdialogProcess, SIGNAL(finished(int,QProcess::ExitStatus)),
                     m_widget, SLOT(slotProcessExited()) );
+#else
+  kWarning() << "Broadcast of icon changes not supported in Emscripten!";
+#endif
 }
 
 void KEditToolBarWidgetPrivate::slotChangeIconText()
@@ -1602,6 +1610,7 @@ void KEditToolBarWidgetPrivate::slotChangeIconText()
 
 void KEditToolBarWidgetPrivate::slotProcessExited()
 {
+#ifndef EMSCRIPTEN
   m_activeList->setEnabled( true );
   m_toolbarCombo->setEnabled( true );
 
@@ -1644,6 +1653,7 @@ void KEditToolBarWidgetPrivate::slotProcessExited()
 
   delete m_kdialogProcess;
   m_kdialogProcess = 0;
+#endif
 }
 
 void KEditToolBarWidgetPrivate::slotDropped(ToolBarListWidget* list, int index, ToolBarItem* item, bool sourceIsActiveList)
