@@ -24,10 +24,13 @@
 
 #include <QtCore/QHash>
 #include <QtCore/QStringList>
+#include <QtCore/QSet>
 
 #include "kcomponentdata.h"
+#ifndef EMSCRIPTEN
 #include "kglobalaccel_interface.h"
 #include "kglobalaccel_component_interface.h"
+#endif
 
 class KAction;
 class KShortcut;
@@ -81,17 +84,21 @@ public:
     bool isUsingForeignComponentName;
     bool enabled;
 
+#ifndef EMSCRIPTEN
     org::kde::KGlobalAccel iface;
 
     //! Get the component @p componentUnique. If @p remember is true the instance is cached and we
     //! subscribe to signals about changes to the component.
     org::kde::kglobalaccel::Component *getComponent(const QString &componentUnique, bool remember);
+#endif
 
     //! Our owner
     KGlobalAccel *q;
 
+#ifndef EMSCRIPTEN
     //! The components the application is using
     QHash<QString, org::kde::kglobalaccel::Component *> components;
+#endif
 };
 
 #endif
