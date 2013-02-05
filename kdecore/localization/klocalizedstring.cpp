@@ -25,7 +25,9 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <klocale_p.h>
+#ifndef EMSCRIPTEN
 #include <klibrary.h>
+#endif
 #include <kstandarddirs.h>
 #include <ktranscript_p.h>
 #include <kuitsemantics_p.h>
@@ -955,6 +957,9 @@ void KLocalizedStringPrivate::loadTranscript ()
     s->loadTranscriptCalled = true;
     s->ktrs = NULL; // null indicates that Transcript is not available
 
+#ifdef EMSCRIPTEN
+    kWarning() << "loadTranscript() not supported for Emscripten";
+#else
     KLibrary lib(QLatin1String("ktranscript"));
     if (!lib.load()) {
         kDebug(173) << "Cannot load transcript plugin:" << lib.errorString();
@@ -969,6 +974,7 @@ void KLocalizedStringPrivate::loadTranscript ()
     }
 
     s->ktrs = initf();
+#endif
 }
 
 void KLocalizedString::notifyCatalogsUpdated (const QStringList &languages,
