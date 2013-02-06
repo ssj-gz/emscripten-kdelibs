@@ -42,9 +42,7 @@
 #include <QtGui/QPixmap>
 #include <QtGui/QPixmapCache>
 #include <QApplication>
-#ifndef EMSCRIPTEN
 #include <QtDBus/QtDBus>
-#endif
 #include <QtGui/QStyleFactory>
 #include <QDesktopServices>
 #ifndef EMSCRIPTEN
@@ -216,10 +214,8 @@ void KGlobalSettings::activate(ActivateOptions options)
         d->activated = true;
 
         if (options & ListenForChanges) {
-#ifndef EMSCRIPTEN
             QDBusConnection::sessionBus().connect( QString(), "/KGlobalSettings", "org.kde.KGlobalSettings",
                                                    "notifyChange", this, SLOT(_k_slotNotifyChange(int,int)) );
-#endif
         }
 
         if (options & ApplySettings) {
@@ -830,7 +826,6 @@ int KGlobalSettings::buttonLayout()
 
 void KGlobalSettings::emitChange(ChangeType changeType, int arg)
 {
-#ifndef EMSCRIPTEN
     QDBusMessage message = QDBusMessage::createSignal("/KGlobalSettings", "org.kde.KGlobalSettings", "notifyChange" );
     QList<QVariant> args;
     args.append(static_cast<int>(changeType));
@@ -843,7 +838,6 @@ void KGlobalSettings::emitChange(ChangeType changeType, int arg)
         extern void qt_x11_apply_settings_in_all_apps();
         qt_x11_apply_settings_in_all_apps();
     }
-#endif
 #endif
 }
 
