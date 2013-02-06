@@ -50,9 +50,7 @@
 #include <QStringList>
 #include <QTextStream>
 #include <QDateTime>
-#ifndef EMSCRIPTEN
 #include <QDBusError>
-#endif
 
 struct KNotification::Private
 {
@@ -408,7 +406,6 @@ void KNotification::slotReceivedId(int id)
 
 }
 
-#ifndef EMSCRIPTEN
 void KNotification::slotReceivedIdError(const QDBusError& error)
 {
 	if(d->id == -2) //we are already closed
@@ -420,8 +417,6 @@ void KNotification::slotReceivedIdError(const QDBusError& error)
 	d->id = -3;
 	QTimer::singleShot(0, this, SLOT(deref()));
 }
-#endif
-
 
 void KNotification::update()
 {

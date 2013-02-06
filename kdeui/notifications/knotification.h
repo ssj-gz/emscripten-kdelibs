@@ -502,9 +502,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 	void slotReceivedId(int);
-#ifndef EMSCRIPTEN
 	void slotReceivedIdError(const QDBusError&);
-#endif
 	
 private:
 	struct Private;
