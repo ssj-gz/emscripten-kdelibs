@@ -25,9 +25,7 @@
 
 #include "kdebug.h"
 #include <QtCore/QTimer>
-#ifndef EMSCRIPTEN
 #include <QtDBus/QtDBus>
-#endif
 
 
 
@@ -50,7 +48,6 @@ KDEDModule::~KDEDModule()
 
 void KDEDModule::setModuleName( const QString& name )
 {
-#ifndef EMSCRIPTEN
    d->moduleName = name;
    QDBusObjectPath realPath( QString::fromLatin1("/modules/") + d->moduleName);
 
@@ -93,9 +90,6 @@ void KDEDModule::setModuleName( const QString& name )
       kDebug() << "registerObject() successful for " << d->moduleName;
       emit moduleRegistered(realPath);
       }
-#else
-    kWarning() << "setModuleName not supported for Emscripten!";
-#endif
 }
 
 QString KDEDModule::moduleName() const
