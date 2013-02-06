@@ -36,10 +36,8 @@
 #include <QtCore/QCoreApplication>
 #include <QtCore/QFile>
 #include <QtCore/QBuffer>
-#ifndef EMSCRIPTEN
 #include <QProcess>
 #include <QtDBus/QtDBus>
-#endif
 
 #include <config.h>
 
@@ -182,12 +180,10 @@ K_GLOBAL_STATIC(KSycocaSingleton, ksycocaInstance)
 KSycoca::KSycoca()
   : d(new KSycocaPrivate)
 {
-#ifndef EMSCRIPTEN
     QDBusConnection::sessionBus().connect(QString(), QString(),
                                           QString::fromLatin1("org.kde.KSycoca"),
                                           QString::fromLatin1("notifyDatabaseChanged"),
                                           this, SLOT(notifyDatabaseChanged(QStringList)));
-#endif
 }
 
 bool KSycocaPrivate::openDatabase(bool openDummyIfNotFound)
