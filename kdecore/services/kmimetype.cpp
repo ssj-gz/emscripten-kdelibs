@@ -34,9 +34,7 @@
 #include <QtCore/QFile>
 #include <QtCore/QStack>
 #include <QtXml/QXmlStreamReader>
-#ifndef EMSCRIPTEN
 #include <QtDBus/QtDBus>
-#endif
 #include <QBuffer>
 
 extern int servicesDebugArea();
@@ -492,16 +490,11 @@ QString KMimeType::favIconForUrl( const KUrl& url )
         || !url.protocol().startsWith(QLatin1String("http"))
         || !KMimeTypeRepository::self()->useFavIcons())
         return QString();
-#ifndef EMSCRIPTEN
     QDBusInterface kded( QString::fromLatin1("org.kde.kded"),
                          QString::fromLatin1("/modules/favicons"),
                          QString::fromLatin1("org.kde.FavIcon") );
     QDBusReply<QString> result = kded.call( QString::fromLatin1("iconForUrl"), url.url() );
     return result;              // default is QString()
-#else
-    kWarning() << "favIconForUrl not yet supported in Emscripten";
-    return QString();
-#endif
 }
 
 QString KMimeType::comment( const KUrl &url) const
