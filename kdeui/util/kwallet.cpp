@@ -920,7 +920,6 @@ bool Wallet::setFolder(const QString& f) {
 
 
 bool Wallet::removeFolder(const QString& f) {
-#ifndef EMSCRIPTEN
 #ifdef HAVE_KSECRETSSERVICE
     if (walletLauncher->m_useKSecretsService) {
         bool result = false;
@@ -967,9 +966,6 @@ bool Wallet::removeFolder(const QString& f) {
             return r;
 #ifdef HAVE_KSECRETSSERVICE
     }
-#endif
-#else
-    return false;
 #endif
 }
 
@@ -1041,7 +1037,6 @@ bool Wallet::WalletPrivate::readSecret(const QString& key, KSecretsService::Secr
 #endif
 
 int Wallet::readEntry(const QString& key, QByteArray& value) {
-#ifndef EMSCRIPTEN
     int rc = -1;
 
 #ifdef HAVE_KSECRETSSERVICE
@@ -1064,9 +1059,6 @@ int Wallet::readEntry(const QString& key, QByteArray& value) {
 #endif
 
     return rc;
-#else
-    return -1;
-#endif
 }
 
 #ifdef HAVE_KSECRETSSERVICE
@@ -1091,7 +1083,6 @@ struct Wallet::WalletPrivate::InsertIntoEntryList {
 int Wallet::readEntryList(const QString& key, QMap<QString, QByteArray>& value) {
 
     int rc = -1;
-#ifndef EMSCRIPTEN
 
 #ifdef HAVE_KSECRETSSERVICE
     if (walletLauncher->m_useKSecretsService) {
@@ -1118,14 +1109,12 @@ int Wallet::readEntryList(const QString& key, QMap<QString, QByteArray>& value) 
     }
 #endif
 
-#endif
     return rc;
 }
 
 
 int Wallet::renameEntry(const QString& oldName, const QString& newName) {
     int rc = -1;
-#ifndef EMSCRIPTEN
 
 #ifdef HAVE_KSECRETSSERVICE
     if (walletLauncher->m_useKSecretsService) {
@@ -1155,16 +1144,12 @@ int Wallet::renameEntry(const QString& oldName, const QString& newName) {
     }
 #endif
 
-#endif
-
     return rc;
 }
 
 
 int Wallet::readMap(const QString& key, QMap<QString,QString>& value) {
     int rc = -1;
-
-#ifndef EMSCRIPTEN
 
 #ifdef HAVE_KSECRETSSERVICE
     if (walletLauncher->m_useKSecretsService) {
@@ -1196,8 +1181,6 @@ int Wallet::readMap(const QString& key, QMap<QString,QString>& value) {
     }
 #endif
 
-#endif
-
     return rc;
 }
 
@@ -1219,8 +1202,6 @@ struct Wallet::WalletPrivate::InsertIntoMapList {
 
 int Wallet::readMapList(const QString& key, QMap<QString, QMap<QString, QString> >& value) {
     int rc = -1;
-
-#ifndef EMSCRIPTEN
 
 #ifdef HAVE_KSECRETSSERVICE
     if (walletLauncher->m_useKSecretsService) {
@@ -1253,15 +1234,12 @@ int Wallet::readMapList(const QString& key, QMap<QString, QMap<QString, QString>
     }
 #endif
 
-#endif
-
     return rc;
 }
 
 
 int Wallet::readPassword(const QString& key, QString& value) {
     int rc = -1;
-#ifndef EMSCRIPTEN
 
 #ifdef HAVE_KSECRETSSERVICE
     if (walletLauncher->m_useKSecretsService) {
@@ -1282,7 +1260,6 @@ int Wallet::readPassword(const QString& key, QString& value) {
     }
 #endif
 
-#endif
     return rc;
 }
 
@@ -1304,8 +1281,6 @@ struct Wallet::WalletPrivate::InsertIntoPasswordList {
 
 int Wallet::readPasswordList(const QString& key, QMap<QString, QString>& value) {
     int rc = -1;
-
-#ifndef EMSCRIPTEN
 
 #ifdef HAVE_KSECRETSSERVICE
     if (walletLauncher->m_useKSecretsService) {
@@ -1331,16 +1306,12 @@ int Wallet::readPasswordList(const QString& key, QMap<QString, QString>& value) 
     }
 #endif
 
-#endif
-    
     return rc;
 }
 
 
 int Wallet::writeEntry(const QString& key, const QByteArray& value, EntryType entryType) {
     int rc = -1;
-
-#ifndef EMSCRIPTEN
 
 #ifdef HAVE_KSECRETSSERVICE
     if (walletLauncher->m_useKSecretsService) {
@@ -1360,16 +1331,12 @@ int Wallet::writeEntry(const QString& key, const QByteArray& value, EntryType en
     }
 #endif
 
-#endif
-
     return rc;
 }
 
 
 int Wallet::writeEntry(const QString& key, const QByteArray& value) {
     int rc = -1;
-
-#ifndef EMSCRIPTEN
 
 #ifdef HAVE_KSECRETSSERVICE
     if (walletLauncher->m_useKSecretsService) {
@@ -1389,16 +1356,12 @@ int Wallet::writeEntry(const QString& key, const QByteArray& value) {
     }
 #endif
 
-#endif
-
     return rc;
 }
 
 
 int Wallet::writeMap(const QString& key, const QMap<QString,QString>& value) {
     int rc = -1;
-
-#ifndef EMSCRIPTEN
 
 #ifdef HAVE_KSECRETSSERVICE
     if (walletLauncher->m_useKSecretsService) {
@@ -1423,16 +1386,12 @@ int Wallet::writeMap(const QString& key, const QMap<QString,QString>& value) {
     }
 #endif
 
-#endif
-
     return rc;
 }
 
 
 int Wallet::writePassword(const QString& key, const QString& value) {
     int rc = -1;
-
-#ifndef EMSCRIPTEN
 
 #ifdef HAVE_KSECRETSSERVICE
     if (walletLauncher->m_useKSecretsService) {
@@ -1452,14 +1411,11 @@ int Wallet::writePassword(const QString& key, const QString& value) {
     }
 #endif
 
-#endif
-
     return rc;
 }
 
 
 bool Wallet::hasEntry(const QString& key) {
-#ifndef EMSCRIPTEN
 #ifdef HAVE_KSECRETSSERVICE
     if (walletLauncher->m_useKSecretsService) {
         QExplicitlySharedDataPointer<KSecretsService::SecretItem> item = d->findItem( key );
@@ -1482,16 +1438,11 @@ bool Wallet::hasEntry(const QString& key) {
 #ifdef HAVE_KSECRETSSERVICE
     }
 #endif
-#else
-    return false;
-#endif
 }
 
 
 int Wallet::removeEntry(const QString& key) {
     int rc = -1;
-
-#ifndef EMSCRIPTEN
 
 #ifdef HAVE_KSECRETSSERVICE
     if (walletLauncher->m_useKSecretsService) {
@@ -1518,16 +1469,12 @@ int Wallet::removeEntry(const QString& key) {
     }
 #endif
 
-#endif
-
     return rc;
 }
 
 
 Wallet::EntryType Wallet::entryType(const QString& key) {
     int rc = 0;
-
-#ifndef EMSCRIPTEN
 
 #ifdef HAVE_KSECRETSSERVICE
     if (walletLauncher->m_useKSecretsService) {
@@ -1563,8 +1510,6 @@ Wallet::EntryType Wallet::entryType(const QString& key) {
         }
 #ifdef HAVE_KSECRETSSERVICE
     }
-#endif
-
 #endif
     return static_cast<EntryType>(rc);
 }
@@ -1666,7 +1611,6 @@ void Wallet::emitWalletOpened() {
 
 bool Wallet::folderDoesNotExist(const QString& wallet, const QString& folder)
 {
-#ifndef EMSCRIPTEN
 #ifdef HAVE_KSECRETSSERVICE
     if (walletLauncher->m_useKSecretsService) {
         kDebug(285) << "WARNING: changing semantics of folderDoesNotExist with KSS: will prompt for the password";
@@ -1691,15 +1635,11 @@ bool Wallet::folderDoesNotExist(const QString& wallet, const QString& folder)
 #ifdef HAVE_KSECRETSSERVICE
     }
 #endif
-#else
-    return false;
-#endif
 }
 
 
 bool Wallet::keyDoesNotExist(const QString& wallet, const QString& folder, const QString& key)
 {
-#ifndef EMSCRIPTEN
 #ifdef HAVE_KSECRETSSERVICE
     if (walletLauncher->m_useKSecretsService) {
         kDebug(285) << "WARNING: changing semantics of keyDoesNotExist with KSS: will prompt for the password";
@@ -1722,9 +1662,6 @@ bool Wallet::keyDoesNotExist(const QString& wallet, const QString& folder, const
 #ifdef HAVE_KSECRETSSERVICE
     }
 #endif
-#else
-    return false;
-#endif
 }
 
 void Wallet::virtual_hook(int, void*) {
@@ -1734,12 +1671,9 @@ void Wallet::virtual_hook(int, void*) {
 
 KWalletDLauncher::KWalletDLauncher()
     : 
-#ifndef EMSCRIPTEN
     m_wallet(0),
-#endif
     m_cgroup(KSharedConfig::openConfig("kwalletrc", KConfig::NoGlobals)->group("Wallet"))
 {
-#ifndef EMSCRIPTEN
     m_useKSecretsService = m_cgroup.readEntry("UseKSecretsService", false);
 #ifdef HAVE_KSECRETSSERVICE
     if (m_useKSecretsService) {
@@ -1751,17 +1685,13 @@ KWalletDLauncher::KWalletDLauncher()
 #ifdef HAVE_KSECRETSSERVICE
     }
 #endif
-#endif
 }
 
 KWalletDLauncher::~KWalletDLauncher()
 {
-#ifndef EMSCRIPTEN
     delete m_wallet;
-#endif
 }
 
-#ifndef EMSCRIPTEN
 org::kde::KWallet &KWalletDLauncher::getInterface()
 {
 //    Q_ASSERT(!m_useKSecretsService);
@@ -1794,7 +1724,6 @@ org::kde::KWallet &KWalletDLauncher::getInterface()
 
     return *m_wallet;
 }
-#endif
 
 } // namespace KWallet
 
