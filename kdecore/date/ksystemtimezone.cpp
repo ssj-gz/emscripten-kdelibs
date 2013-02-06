@@ -43,12 +43,10 @@
 #include <QtCore/QRegExp>
 #include <QtCore/QStringList>
 #include <QtCore/QTextStream>
-#ifndef EMSCRIPTEN
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusConnectionInterface>
 #include <QtDBus/QDBusReply>
-#endif
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -182,12 +180,10 @@ K_GLOBAL_STATIC(KTimeZone, simulatedLocalZone)
 KSystemTimeZones::KSystemTimeZones()
   : d(0)
 {
-#ifndef EMSCRIPTEN
     QDBusConnection dbus = QDBusConnection::sessionBus();
     const QString dbusIface = QString::fromLatin1(KTIMEZONED_DBUS_IFACE);
     dbus.connect(QString(), QString(), dbusIface, QLatin1String("configChanged"), this, SLOT(configChanged()));
     dbus.connect(QString(), QString(), dbusIface, QLatin1String("zonetabChanged"), this, SLOT(zonetabChanged(QString)));
-#endif
     // No need to connect to definitionChanged() - see comments in zoneDefinitionChanged()
     //dbus.connect(QString(), QString(), dbusIface, QLatin1String("definitionChanged"), this, SLOT(zoneDefinitionChanged(QString)));
 }
@@ -301,7 +297,6 @@ KSystemTimeZonesPrivate *KSystemTimeZonesPrivate::instance()
 
         // A KSystemTimeZones instance is required only to catch D-Bus signals.
         m_parent = new KSystemTimeZones;
-#ifndef EMSCRIPTEN
         // Ensure that the KDED time zones module has initialized. The call loads the module on demand.
         if (!QDBusConnection::sessionBus().interface()->isServiceRegistered(QLatin1String("org.kde.kded")))
             KToolInvocation::klauncher();   // this calls startKdeinit, and blocks until it returns
@@ -313,7 +308,6 @@ KSystemTimeZonesPrivate *KSystemTimeZonesPrivate::instance()
             kError(161) << "KSystemTimeZones: ktimezoned initialize() D-Bus call failed: " << reply.error().message() << endl;
 kDebug(161)<<"instance(): ... initialised";
         delete ktimezoned;
-#endif
 
         // Read the time zone config written by ktimezoned
         readConfig(true);
