@@ -22,9 +22,7 @@
 
 #include <QHash>
 #include <QWidget>
-#ifndef EMSCRIPTEN
 #include <QtDBus/QtDBus>
-#endif
 #include <QPointer>
 #include <QtCore/QBuffer>
 
@@ -34,18 +32,14 @@
 #include <kconfig.h>
 #include <klocale.h>
 
-#ifndef EMSCRIPTEN
 #include "knotify_interface.h"
-#endif
 
 typedef QHash<QString,QString> Dict;
 
 struct KNotificationManager::Private
 {
     QHash<int , KNotification*> notifications;
-#ifndef EMSCRIPTEN
     org::kde::KNotify *knotify;
-#endif
 };
 
 KNotificationManager * KNotificationManager::self()
@@ -58,7 +52,6 @@ KNotificationManager * KNotificationManager::self()
 KNotificationManager::KNotificationManager()
     : d(new Private)
 {
-#ifndef EMSCRIPTEN
     if (!QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.knotify")) {
         QString error;
         int ret = KToolInvocation::startServiceByDesktopPath("knotify4.desktop",
@@ -73,15 +66,12 @@ KNotificationManager::KNotificationManager()
                            this, SLOT(notificationClosed(int)));
     connect(d->knotify, SIGNAL(notificationActivated(int,int)),
                            this, SLOT(notificationActivated(int,int)));
-#endif
 }
 
 
 KNotificationManager::~KNotificationManager()
 {
-#ifndef EMSCRIPTEN
     delete d->knotify;
-#endif
     delete d;
 }
 
@@ -113,9 +103,7 @@ void KNotificationManager::close( int id, bool force )
 	if(force || d->notifications.contains(id)) {
 		d->notifications.remove(id);
 		kDebug( 299 ) << id;
-#ifndef EMSCRIPTEN
 		d->knotify->closeNotification(id);
-#endif
 	}
 }
 
@@ -124,7 +112,6 @@ bool KNotificationManager::notify( KNotification* n, const QPixmap &pix,
                                            const KNotification::ContextList & contexts,
                                            const QString &appname)
 {
-#ifndef EMSCRIPTEN
     WId winId=n->widget() ? n->widget()->topLevelWidget()->winId()  : 0;
 
     QByteArray pixmapData;
@@ -152,10 +139,6 @@ bool KNotificationManager::notify( KNotification* n, const QPixmap &pix,
     args.append(QVariant(contextList)); 
     args << n->title() << n->text() <<  pixmapData << QVariant(actions) << timeout << qlonglong(winId) ;
     return d->knotify->callWithCallback( "event", args, n, SLOT(slotReceivedId(int)), SLOT(slotReceivedIdError(QDBusError)));
-#else
-    kWarning() << "KNotificationManager::notify not supported in Emscripten";
-    return false;
-#endif
 }
 
 void KNotificationManager::insert(KNotification *n, int id)
@@ -176,11 +159,7 @@ void KNotificationManager::update(KNotification * n, int id)
         n->pixmap().save(&buffer, "PNG");
     }
 
-#ifndef EMSCRIPTEN
     d->knotify->update(id, n->title(), n->text(), pixmapData , n->actions() );
-#else
-    kWarning() << "KNotificationManager::update not supported in Emscripten";
-#endif
 }
 
 void KNotificationManager::reemit(KNotification * n, int id)
@@ -195,11 +174,7 @@ void KNotificationManager::reemit(KNotification * n, int id)
 		contextList << vl;
 	}
 
-#ifndef EMSCRIPTEN
 	d->knotify->reemit(id, contextList);
-#else
-    kWarning() << "KNotificationManager::reemit not supported in Emscripten";
-#endif
 }
 
 
