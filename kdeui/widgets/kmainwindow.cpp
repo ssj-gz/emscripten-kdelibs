@@ -26,9 +26,7 @@
 
 #include "kmainwindow.h"
 #include "kmainwindow_p.h"
-#ifndef EMSCRIPTEN
 #include "kmainwindowiface_p.h"
-#endif
 #include "ktoolbarhandler_p.h"
 #include "kcmdlineargs.h"
 #include "ktoggleaction.h"
@@ -387,13 +385,11 @@ void KMainWindowPrivate::polish(KMainWindow *q)
             dbusName[i] = QLatin1Char('_');
     }
 
-#ifndef EMSCRIPTEN
     QDBusConnection::sessionBus().registerObject(dbusName, q, QDBusConnection::ExportScriptableSlots |
                                        QDBusConnection::ExportScriptableProperties |
                                        QDBusConnection::ExportNonScriptableSlots |
                                        QDBusConnection::ExportNonScriptableProperties |
                                        QDBusConnection::ExportAdaptors);
-#endif
 }
 
 void KMainWindowPrivate::setSettingsDirty(CallCompression callCompression)
