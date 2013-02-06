@@ -23,9 +23,7 @@
 #include <QtCore/QList>
 #include <QtCore/QObject>
 #include <QtGui/QKeySequence>
-#ifndef EMSCRIPTEN
 #include <QtDBus/QDBusArgument>
-#endif
 #include <QtCore/QMetaType>
 
 
@@ -39,9 +37,7 @@ class KDEUI_EXPORT KGlobalShortcutInfo : public QObject
     {
     Q_OBJECT
 
-#ifndef EMSCRIPTEN
     Q_CLASSINFO("D-Bus Interface", "org.kde.kglobalaccel.KShortcutInfo")
-#endif
 
     Q_SCRIPTABLE Q_PROPERTY(QString uniqueName READ uniqueName)
     Q_SCRIPTABLE Q_PROPERTY(QString friendlyName READ friendlyName)
@@ -85,11 +81,9 @@ private:
 
     friend class GlobalShortcut;
 
-#ifndef EMSCRIPTEN
     friend KDEUI_EXPORT const QDBusArgument &operator>> (
             const QDBusArgument &argument,
             KGlobalShortcutInfo &shortcut);
-#endif
 
     //! Implementation details
     KGlobalShortcutInfoPrivate *d;
