@@ -30,9 +30,7 @@
 #include <QtCore/QTimer>
 #include <QtGui/QWidget>
 #include <QtCore/QList>
-#ifndef EMSCRIPTEN
 #include <QtDBus/QtDBus>
-#endif
 #include <QtCore/QMetaType>
 
 #include "kauthorized.h"
@@ -515,7 +513,6 @@ void KApplicationPrivate::init(bool GUIenabled)
 #endif
 
 
-#ifndef EMSCRIPTEN
   // sanity checking, to make sure we've connected
   extern void qDBusBindToApplication();
   qDBusBindToApplication();
@@ -551,7 +548,6 @@ void KApplicationPrivate::init(bool GUIenabled)
                                                QDBusConnection::ExportScriptableSlots |
                                                QDBusConnection::ExportScriptableProperties |
                                                QDBusConnection::ExportAdaptors);
-#endif
 
   // Trigger creation of locale.
   (void) KGlobal::locale();
