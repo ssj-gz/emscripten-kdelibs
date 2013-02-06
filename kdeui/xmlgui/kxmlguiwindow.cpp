@@ -26,9 +26,7 @@
 #include "kxmlguiwindow.h"
 #include "kmainwindow_p.h"
 #include "kactioncollection.h"
-#ifndef EMSCRIPTEN
 #include "kmainwindowiface_p.h"
-#endif
 #include "ktoolbarhandler_p.h"
 #include "kxmlguifactory.h"
 #include "kcmdlineargs.h"
@@ -97,9 +95,7 @@ KXmlGuiWindow::KXmlGuiWindow( QWidget* parent, Qt::WFlags f )
     d->toolBarHandler = 0;
     d->showStatusBarAction = 0;
     d->factory = 0;
-#ifndef EMSCRIPTEN
     new KMainWindowInterface(this);
-#endif
 }
 
 
@@ -131,14 +127,12 @@ bool KXmlGuiWindow::event( QEvent* ev )
 {
     bool ret = KMainWindow::event(ev);
     if (ev->type()==QEvent::Polish) {
-#ifndef EMSCRIPTEN
         QDBusConnection::sessionBus().registerObject(dbusName() + "/actions", actionCollection(),
                                                      QDBusConnection::ExportScriptableSlots |
                                                      QDBusConnection::ExportScriptableProperties |
                                                      QDBusConnection::ExportNonScriptableSlots |
                                                      QDBusConnection::ExportNonScriptableProperties |
                                                      QDBusConnection::ExportChildObjects);
-#endif
     }
     return ret;
 }
