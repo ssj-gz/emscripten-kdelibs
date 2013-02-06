@@ -19,9 +19,7 @@
 */
 
 #include "ktoolinvocation.h"
-#ifndef EMSCRIPTEN
 #include "klauncher_iface.h"
-#endif
 #include "kdebug.h"
 #include "kglobal.h"
 #include "kstandarddirs.h"
@@ -56,7 +54,6 @@ KToolInvocation::~KToolInvocation()
 {
 }
 
-#ifndef EMSCRIPTEN
 Q_GLOBAL_STATIC_WITH_ARGS(org::kde::KLauncher, klauncherIface,
                           (QString::fromLatin1("org.kde.klauncher"), QString::fromLatin1("/KLauncher"), QDBusConnection::sessionBus()))
 
@@ -68,7 +65,6 @@ org::kde::KLauncher *KToolInvocation::klauncher()
     }
     return ::klauncherIface();
 }
-#endif
 
 static void printError(const QString& text, QString* error)
 {
