@@ -16,7 +16,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef EMSCRIPTEN
 #include "kglobalshortcutinfo.h"
 #include "kglobalshortcutinfo_p.h"
 
@@ -76,5 +75,4 @@ const QDBusArgument &operator>> (const QDBusArgument &argument, KGlobalShortcutI
     argument.endStructure();
     return argument;
     }
-#endif
 
