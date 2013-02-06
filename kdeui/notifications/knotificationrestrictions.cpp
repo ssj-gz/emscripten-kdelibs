@@ -26,11 +26,9 @@
 #include <klocale.h>
 
 #include <QtGui/QApplication>
-#ifndef EMSCRIPTEN
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusMessage>
 #include <QtDBus/QDBusReply>
-#endif
 
 #include <config.h>
 
@@ -107,7 +105,6 @@ void KNotificationRestrictions::Private::screensaverFakeKeyEvent()
 
 void KNotificationRestrictions::Private::startScreenSaverPrevention()
 {
-#ifndef EMSCRIPTEN
     kDebug(297);
     
     QDBusMessage message = QDBusMessage::createMethodCall(
@@ -151,12 +148,10 @@ void KNotificationRestrictions::Private::startScreenSaverPrevention()
     screensaverFakeKeyEvent();
     screensaverTimer->start( 55000 );
 #endif // HAVE_XTEST
-#endif
 }
 
 void KNotificationRestrictions::Private::stopScreenSaverPrevention()
 {
-#ifndef EMSCRIPTEN
     if (screenSaverDbusCookie != -1) {
         QDBusMessage message = QDBusMessage::createMethodCall(
                 "org.freedesktop.ScreenSaver", "/ScreenSaver", "org.freedesktop.ScreenSaver", "UnInhibit");
@@ -170,7 +165,6 @@ void KNotificationRestrictions::Private::stopScreenSaverPrevention()
     delete screensaverTimer;
     screensaverTimer = 0;
 #endif // HAVE_XTEST
-#endif
 }
 
 QString KNotificationRestrictions::Private::determineProgramName()
