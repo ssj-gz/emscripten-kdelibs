@@ -27,6 +27,7 @@
 
 #include "ktcpsocket.h"
 
+#ifndef QT_NO_OPENSSL
 /**
  * KDE SSL Information Dialog
  *
@@ -97,5 +98,6 @@ private Q_SLOTS:
 	void launchConfig();
 	void displayFromChain(int);
 };
+#endif
 
 #endif

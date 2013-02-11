@@ -465,6 +465,7 @@ int SlaveInterfacePrivate::messageBox(int type, const QString &text,
         break;
     case KIO::SlaveBase::SSLMessageBox:
     {
+#ifndef QT_NO_OPENSSL
         KIO::MetaData meta = sslMetaData;
         QPointer<KSslInfoDialog> kid (new KSslInfoDialog(parentWindow));
         //### this is boilerplate code and appears in khtml_part.cpp almost unchanged!
@@ -500,6 +501,7 @@ int SlaveInterfacePrivate::messageBox(int type, const QString &text,
         // KSslInfoDialog deletes itself (Qt::WA_DeleteOnClose).
         result = 1; // whatever
         delete kid;
+#endif
         break;
     }
     default:
