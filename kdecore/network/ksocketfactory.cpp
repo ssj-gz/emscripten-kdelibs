@@ -70,7 +70,11 @@ QTcpSocket *KSocketFactory::connectToHost(const QString &protocol, const QString
                                           QObject *parent)
 {
     // ### TO-DO: find a way to determine if we should use QSslSocket or plain QTcpSocket
+#ifndef EMSCRIPTEN
     QTcpSocket *socket = new QSslSocket(parent);
+#else
+    QTcpSocket *socket = new QTcpSocket(parent);
+#endif
     connectToHost(socket, protocol, host, port);
     return socket;
 }

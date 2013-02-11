@@ -23,11 +23,11 @@ macro_bool_to_01(SYS_INOTIFY_H_FOUND HAVE_SYS_INOTIFY_H)
 configure_file(io/config-kdirwatch.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/io/config-kdirwatch.h )
 
 # Configure checks for network/ but also for netsupp.*
-if (NOT CMAKE_SYSTEM_NAME MATCHES Emscripten)
+#if (NOT CMAKE_SYSTEM_NAME MATCHES Emscripten)
     include(network/ConfigureChecks.cmake)
     configure_file(network/config-network.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/network/config-network.h )
     include_directories( ${CMAKE_CURRENT_BINARY_DIR}/network )
-endif()
+#endif()
 
 # Configure checks for date/
 include(date/ConfigureChecks.cmake)
@@ -310,6 +310,7 @@ endif (NOT KDECORE_NO_KDE3SUPPORT)
 
 set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS}
    network/klocalsocket.cpp
+   network/ksocketfactory.cpp
    localization/kcatalog.cpp
    localization/kcurrencycode.cpp
    localization/kcharsets.cpp
@@ -373,7 +374,7 @@ set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS}
 )
 
 if (NOT EMSCRIPTEN)
-    set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS} network/ksocketfactory.cpp network/ksslcertificatemanager.cpp network/ktcpsocket.cpp util/klauncher_iface.cpp util/klibrary.cpp util/qtest_kde.cpp)
+    set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS} network/ksslcertificatemanager.cpp network/ktcpsocket.cpp util/klauncher_iface.cpp util/klibrary.cpp util/qtest_kde.cpp)
 endif()
 
 if(NOT KDE_NO_DEPRECATED AND NOT EMSCRIPTEN)
