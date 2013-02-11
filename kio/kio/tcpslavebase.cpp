@@ -31,7 +31,9 @@
 #include <kdebug.h>
 #include <kconfiggroup.h>
 #include <ksslcertificatemanager.h>
+#ifndef QT_NO_OPENSSL
 #include <ksslsettings.h>
+#endif
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <ktoolinvocation.h>
