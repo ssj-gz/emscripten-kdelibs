@@ -9,4 +9,6 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}
 kde4_no_enable_final(solid)
 
 add_subdirectory( solid )
-add_subdirectory( tests )
+if (KDE4_BUILD_TESTS)
+    add_subdirectory( tests )
+endif()
