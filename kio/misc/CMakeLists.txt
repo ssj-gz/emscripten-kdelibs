@@ -3,10 +3,10 @@
 include_directories( BEFORE ${CMAKE_SOURCE_DIR}/kio )
 
 add_subdirectory( ksendbugmail )
-if(NOT WIN32)
+if(NOT WIN32 AND NOT EMSCRIPTEN)
   # arpa/nameser.h
   add_subdirectory( kpac )
-endif(NOT WIN32)
+endif(NOT WIN32 AND NOT EMSCRIPTEN)
 add_subdirectory( kntlm )
 
 ########### next target ###############
