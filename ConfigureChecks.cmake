@@ -111,7 +111,9 @@ if(NOT WIN32)
   # can be removed when 4.1 is out
   check_function_exists(readdir_r     HAVE_READDIR_R)                 # kio
 endif(NOT WIN32)
-check_function_exists(sendfile        HAVE_SENDFILE)                  # kioslave
+if (NOT EMSCRIPTEN)
+    check_function_exists(sendfile        HAVE_SENDFILE)                  # kioslave
+endif()
 check_function_exists(srandom         HAVE_SRANDOM)                   # config.h
 check_function_exists(_NSGetEnviron   HAVE_NSGETENVIRON)              # kinit, config.h
 check_function_exists(gettimeofday    HAVE_GETTIMEOFDAY)              # testkjs
