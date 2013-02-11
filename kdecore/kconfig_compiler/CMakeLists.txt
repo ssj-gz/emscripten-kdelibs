@@ -7,6 +7,7 @@
 #    set(KDE4_KCFGC_EXECUTABLE kconfig_compiler)
 # else (CMAKE_CROSSCOMPILING)
 
+if (NOT EMSCRIPTEN)
 
    set(kconfig_compiler_SRCS kconfig_compiler.cpp)
 
@@ -18,6 +19,7 @@
    # "export" this target too so we can use the LOCATION property of the imported target in
    # FindKDE4Internal.cmake to get the full path to the installed executable instead of using FIND_PROGRAM(), Alex
    install(TARGETS kconfig_compiler EXPORT kdelibsToolsTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+endif()
 
 
 #    # export this binary for cross-compilation
