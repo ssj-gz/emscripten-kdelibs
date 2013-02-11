@@ -348,7 +348,9 @@ if (NOT EMSCRIPTEN)
 endif()
 add_subdirectory( includes )
 
-add_subdirectory( experimental )
+if (NOT EMSCRIPTEN)
+    add_subdirectory( experimental )
+endif()
 macro_optional_add_subdirectory( doc  )
 
 ################# write dependency file which will be installed #################
