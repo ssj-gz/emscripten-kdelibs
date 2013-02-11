@@ -57,8 +57,10 @@ AccessManagerReply::AccessManagerReply(const QNetworkAccessManager::Operation op
     setOperation(op);
     setError(NoError, QString());
 
+#ifndef QT_NO_OPENSSL
     if (!request.sslConfiguration().isNull())
         setSslConfiguration(request.sslConfiguration());
+#endif
 
     connect(kioJob, SIGNAL(redirection(KIO::Job*,KUrl)), SLOT(slotRedirection(KIO::Job*,KUrl)));
     connect(kioJob, SIGNAL(percent(KJob*,ulong)), SLOT(slotPercent(KJob*,ulong)));
@@ -91,8 +93,10 @@ AccessManagerReply::AccessManagerReply (const QNetworkAccessManager::Operation o
     setOperation(op);
     setHeaderFromMetaData(metaData);
 
+#ifndef QT_NO_OPENSSL
     if (!request.sslConfiguration().isNull())
         setSslConfiguration(request.sslConfiguration());
+#endif
 
     setError(NoError, QString());
     emitFinished(true, Qt::QueuedConnection);
@@ -174,12 +178,14 @@ void AccessManagerReply::setHeaderFromMetaData (const KIO::MetaData& _metaData)
 
     KIO::MetaData metaData(_metaData);
 
+#ifndef QT_NO_OPENSSL
     // Set the encryption attribute and values...
     QSslConfiguration sslConfig;
     const bool isEncrypted = KIO::Integration::sslConfigFromMetaData(metaData, sslConfig);
     setAttribute(QNetworkRequest::ConnectionEncryptedAttribute, isEncrypted);
     if (isEncrypted)
         setSslConfiguration(sslConfig);
+#endif
 
     // Set the raw header information...
     const QStringList httpHeaders (metaData.value(QL1S("HTTP-Headers")).split(QL1C('\n'), QString::SkipEmptyParts));
