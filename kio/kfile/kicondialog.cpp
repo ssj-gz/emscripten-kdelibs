@@ -22,7 +22,10 @@
 #include <kiconloader.h>
 #include <kfiledialog.h>
 #include <kimagefilepreview.h>
-#ifndef _WIN32_WCE
+#if (defined (_WIN32_WCE)) || (defined(EMSCRIPTEN))
+#define NO_SVG
+#endif
+#ifndef NO_SVG
 #include <ksvgrenderer.h>
 #endif
 
@@ -204,7 +207,7 @@ void KIconCanvas::KIconCanvasPrivate::_k_slotLoadFiles()
 	if (ext != "SVG" && ext != "VGZ")
 	    img.load(*it);
 	else {
-#ifndef _WIN32_WCE
+#ifndef NO_SVG
             // Special stuff for SVG icons
             img = QImage(canvasIconWidth, canvasIconHeight, QImage::Format_ARGB32_Premultiplied);
             img.fill(0);
