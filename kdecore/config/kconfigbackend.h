@@ -29,15 +29,13 @@
 #include <kdecore_export.h>
 #include <kconfigbase.h>
 #include <kdebug.h>
-#if !(defined(KDE_NO_DEPRECATED)) & !(defined(EMSCRIPTEN))
+#ifndef KDE_NO_DEPRECATED
 #include <kgenericfactory.h>
 #endif
 #include <klocale.h>
-#ifndef EMSCRIPTEN
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <ksharedptr.h>
-#endif
 
 class KEntryMap;
 class KComponentData;
@@ -214,14 +212,12 @@ private:
 Q_DECLARE_OPERATORS_FOR_FLAGS(KConfigBackend::ParseOptions)
 Q_DECLARE_OPERATORS_FOR_FLAGS(KConfigBackend::WriteOptions)
 
-#ifndef EMSCRIPTEN
 /**
  * Register a KConfig backend when it is contained in a loadable module
  */
 #define K_EXPORT_KCONFIGBACKEND(libname, classname) \
 K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
 K_EXPORT_PLUGIN(factory("kconfigbackend_" #libname))
-#endif
 
 
 #endif // KCONFIGBACKEND_H
