@@ -167,9 +167,9 @@ endif (UNIX)
 add_subdirectory( kconfig_compiler )
 add_subdirectory( tests )
 add_subdirectory( sonnet/tests )
-if ( NOT WINCE )
+if ( NOT WINCE AND NOT EMSCRIPTEN)
     add_subdirectory( network/kssld )
-endif ( NOT WINCE )
+endif ( NOT WINCE AND NOT EMSCRIPTEN)
 
 ########### next target ###############
 
