@@ -24,10 +24,8 @@
 #include <kdebug.h>
 #include <kaboutdata.h>
 
-#ifndef EMSCRIPTEN
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkRequest>
-#endif
 
 namespace KDEPrivate
 {
@@ -233,7 +231,6 @@ void KAboutApplicationPersonModel::onPersonJobFinished( Attica::BaseJob *job )  
 #endif //HAVE_ATTICA
 }
 
-#ifndef EMSCRIPTEN
 void KAboutApplicationPersonModel::onAvatarJobFinished( QNetworkReply *reply )  //SLOT
 {
 #ifndef HAVE_ATTICA
@@ -265,7 +262,6 @@ void KAboutApplicationPersonModel::onAvatarJobFinished( QNetworkReply *reply )  
     fetchOcsLinkIcons( personProfileListIndex );
 #endif //HAVE_ATTICA
 }
-#endif
 
 void KAboutApplicationPersonModel::fetchOcsLinkIcons( int personProfileListIndex )
 {
@@ -355,11 +351,9 @@ KAboutApplicationPersonIconsJob::KAboutApplicationPersonIconsJob( KAboutApplicat
     , m_personProfileListIndex( personProfileListIndex )
     , m_model( model )
 {
-#ifndef EMSCRIPTEN
     m_manager = new QNetworkAccessManager( this );
     connect( m_manager, SIGNAL(finished(QNetworkReply*)),
              this, SLOT(onJobFinished(QNetworkReply*)) );
-#endif
 
     m_ocsLinks = model->m_profileList.value( personProfileListIndex ).ocsLinks();
 }
@@ -378,11 +372,9 @@ void KAboutApplicationPersonIconsJob::getIcons( int i )
         }
         else if( m_model->m_ocsLinkIconUrls.contains( it->type() ) )
         {
-#ifndef EMSCRIPTEN
             QNetworkReply *reply =
                 m_manager->get( QNetworkRequest( QUrl( m_model->m_ocsLinkIconUrls.value( it->type() ) ) ) );
             reply->setProperty( "linkIndex", i );
-#endif
             return;
         }
         ++i;
@@ -390,7 +382,6 @@ void KAboutApplicationPersonIconsJob::getIcons( int i )
     emit finished( this );
 }
 
-#ifndef EMSCRIPTEN
 void KAboutApplicationPersonIconsJob::onJobFinished( QNetworkReply *reply ) //SLOT
 {
     int i = reply->property( "linkIndex" ).toInt();
@@ -412,7 +403,6 @@ void KAboutApplicationPersonIconsJob::onJobFinished( QNetworkReply *reply ) //SL
     reply->deleteLater();
     getIcons( i );
 }
-#endif
 
 } //namespace KDEPrivate
 
