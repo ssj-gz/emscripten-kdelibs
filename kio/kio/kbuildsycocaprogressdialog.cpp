@@ -17,9 +17,7 @@
 */
 #include "kbuildsycocaprogressdialog.h"
 #include <ksycoca.h>
-#ifndef EMSCRIPTEN
 #include <kprocess.h>
-#endif
 #include <kstandarddirs.h>
 #include <klocale.h>
 #include <kdebug.h>
