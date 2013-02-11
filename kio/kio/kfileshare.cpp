@@ -190,6 +190,7 @@ void KFileShare::readShareList()
         s_authorization = ErrorNotFound;
         return;
     }
+#ifndef EMSCRIPTEN
     QProcess proc;
     proc.start( exe, QStringList() );
     if ( !proc.waitForFinished() ) {
@@ -210,6 +211,11 @@ void KFileShare::readShareList()
             kDebug(7000) << "Shared dir:" << line;
         }
     }
+#else
+    kError() << "Can't run" << exe;
+    s_authorization = ErrorNotFound;
+    return;
+#endif
 }
 
 
