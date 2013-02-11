@@ -25,11 +25,13 @@ macro_log_feature(JASPER_FOUND "JasPer" "Support for JPEG-2000 images" "http://w
 
 ##################################
 
-set(kimg_eps_LIB_SRCS eps.cpp)
-kde4_add_plugin(kimg_eps ${kimg_eps_LIB_SRCS})
-target_link_libraries(kimg_eps  ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY})
+if (NOT EMSCRIPTEN)
+    set(kimg_eps_LIB_SRCS eps.cpp)
+    kde4_add_plugin(kimg_eps ${kimg_eps_LIB_SRCS})
+    target_link_libraries(kimg_eps  ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY})
 
-install(TARGETS kimg_eps  DESTINATION ${PLUGIN_INSTALL_DIR}/plugins/imageformats/ )
+    install(TARGETS kimg_eps  DESTINATION ${PLUGIN_INSTALL_DIR}/plugins/imageformats/ )
+endif()
 
 ##################################
 
