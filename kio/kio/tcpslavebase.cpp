@@ -93,6 +93,7 @@ class TCPSlaveBase::TcpSlaveBasePrivate
 public:
     TcpSlaveBasePrivate(TCPSlaveBase* qq) : q(qq) {}
 
+#ifndef QT_NO_OPENSSL
     void setSslMetaData()
     {
         sslMetaData.insert("ssl_in_use", "TRUE");
@@ -150,7 +151,6 @@ public:
         sendSslMetaData();
     }
 
-#ifndef QT_NO_OPENSSL
     void sendSslMetaData()
     {
         MetaData::ConstIterator it = sslMetaData.constBegin();
@@ -205,9 +205,11 @@ TCPSlaveBase::TCPSlaveBase(const QByteArray &protocol,
     d->isBlocking = true;
     d->port = 0;
     d->serviceName = protocol;
+#ifndef QT_NO_OPENSSL
     d->usingSSL = false;
     d->autoSSL = autoSSL;
     d->sslNoUi = false;
+#endif
     // Limit the read buffer size to 14 MB (14*1024*1024) (based on the upload limit
     // in TransferJob::slotDataReq). See the docs for QAbstractSocket::setReadBufferSize
     // and the BR# 187876 to understand why setting this limit is necessary.
@@ -255,11 +257,13 @@ ssize_t TCPSlaveBase::write(const char *data, ssize_t len)
 
 ssize_t TCPSlaveBase::read(char* data, ssize_t len)
 {
+#ifndef QT_NO_OPENSSL
     if (d->usingSSL && (d->socket.encryptionMode() != KTcpSocket::SslClientMode)) {
         d->clearSslMetaData();
         kDebug(7029) << "lost SSL connection.";
         return -1;
     }
+#endif
 
     if (!d->socket.bytesAvailable()) {
         const int timeout = d->isBlocking ? -1 : (readTimeout() * 1000);
@@ -281,11 +285,13 @@ ssize_t TCPSlaveBase::read(char* data, ssize_t len)
 
 ssize_t TCPSlaveBase::readLine(char *data, ssize_t len)
 {
+#ifndef QT_NO_OPENSSL
     if (d->usingSSL && (d->socket.encryptionMode() != KTcpSocket::SslClientMode)) {
         d->clearSslMetaData();
         kDebug(7029) << "lost SSL connection.";
         return -1;
     }
+#endif
 
     const int timeout = (d->isBlocking ? -1: (readTimeout() * 1000));
     ssize_t readTotal = 0;
@@ -318,7 +324,9 @@ bool TCPSlaveBase::connectToHost(const QString &/*protocol*/,
 
 int TCPSlaveBase::connectToHost(const QString& host, quint16 port, QString* errorString)
 {
+#ifndef QT_NO_OPENSSL
     d->clearSslMetaData(); //We have separate connection and SSL setup phases
+#endif
 
     if (errorString) {
         errorString->clear();  // clear prior error messages.
@@ -326,6 +334,7 @@ int TCPSlaveBase::connectToHost(const QString& host, quint16 port, QString* erro
 
     d->socket.setVerificationPeerName(host); // Used for ssl certificate verification (SNI)
 
+#ifndef QT_NO_OPENSSL
     //  - leaving SSL - warn before we even connect
     //### see if it makes sense to move this into the HTTP ioslave which is the only
     //    user.
@@ -378,6 +387,7 @@ int TCPSlaveBase::connectToHost(const QString& host, quint16 port, QString* erro
     const int lastSslVerson = config()->readEntry("LastUsedSslVersion", static_cast<int>(KTcpSocket::SecureProtocols));
     KTcpSocket::SslVersion trySslVersion = static_cast<KTcpSocket::SslVersion>(lastSslVerson);
     KTcpSocket::SslVersions alreadyTriedSslVersions = trySslVersion;
+#endif
 
     const int timeout = (connectTimeout() * 1000);
     while (true) {
@@ -413,6 +423,7 @@ int TCPSlaveBase::connectToHost(const QString& host, quint16 port, QString* erro
         d->ip = d->socket.peerAddress().toString();
         d->port = d->socket.peerPort();
 
+#ifndef QT_NO_OPENSSL
         if (d->autoSSL) {
             SslResult res = d->startTLSInternal(trySslVersion, sslConfig, 30000 /*30 secs timeout*/);
             if ((res & ResultFailed) && (res & ResultFailedEarly)) {
@@ -471,6 +482,7 @@ int TCPSlaveBase::connectToHost(const QString& host, quint16 port, QString* erro
         }
 #endif
         return 0;
+#endif
     }
     Q_ASSERT(false);
     // Code flow never gets here but let's make the compiler happy.
@@ -486,7 +498,9 @@ void TCPSlaveBase::disconnectFromHost()
     kDebug(7027);
     d->host.clear();
     d->ip.clear();
+#ifndef QT_NO_OPENSSL
     d->usingSSL = false;
+#endif
 
     if (d->socket.state() == KTcpSocket::UnconnectedState) {
         // discard incoming data - the remote host might have disconnected us in the meantime
@@ -504,6 +518,7 @@ void TCPSlaveBase::disconnectFromHost()
     d->socket.close(); //whatever that means on a socket
 }
 
+#ifndef QT_NO_OPENSSL
 bool TCPSlaveBase::isAutoSsl() const
 {
     return d->autoSSL;
@@ -513,6 +528,7 @@ bool TCPSlaveBase::isUsingSsl() const
 {
     return d->usingSSL;
 }
+#endif
 
 quint16 TCPSlaveBase::port() const
 {
@@ -524,6 +540,7 @@ bool TCPSlaveBase::atEnd() const
     return d->socket.atEnd();
 }
 
+#ifndef QT_NO_OPENSSL
 bool TCPSlaveBase::startSsl()
 {
     if (d->usingSSL)
@@ -988,6 +1005,7 @@ TCPSlaveBase::SslResult TCPSlaveBase::verifyServerCertificate()
 #endif //#if 0
     return ResultOk | ResultOverridden;
 }
+#endif
 
 
 bool TCPSlaveBase::isConnected() const
@@ -1017,7 +1035,9 @@ void TCPSlaveBase::setBlocking(bool b)
 void TCPSlaveBase::virtual_hook(int id, void* data)
 {
     if (id == SlaveBase::AppConnectionMade) {
+#ifndef QT_NO_OPENSSL
         d->sendSslMetaData();
+#endif
     } else {
         SlaveBase::virtual_hook(id, data);
     }
