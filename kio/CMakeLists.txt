@@ -37,17 +37,20 @@ endif(NOT KIO_NO_NEPOMUK)
 include_directories(
    ${CMAKE_CURRENT_SOURCE_DIR}/bookmarks
    ${CMAKE_CURRENT_SOURCE_DIR}/kio
-   ${CMAKE_CURRENT_SOURCE_DIR}/kfile
-   ${CMAKE_CURRENT_SOURCE_DIR}/kssl
    ${CMAKE_CURRENT_SOURCE_DIR}      # for including kio/kio_export.h
    ${CMAKE_CURRENT_BINARY_DIR}/kio
-   ${CMAKE_CURRENT_BINARY_DIR}/kssl
    ${CMAKE_CURRENT_BINARY_DIR}      # e.g. for observer_stub.h
    ${KDE4_KDEUI_INCLUDES}
    ${KDE4_KDECORE_INCLUDES}/
    ${ZLIB_INCLUDE_DIR}
 
    )
+if (NOT EMSCRIPTEN)
+    include_directories(
+       ${CMAKE_CURRENT_SOURCE_DIR}/kssl
+       ${CMAKE_CURRENT_BINARY_DIR}/kssl
+    )
+endif()
 if (NOT KIO_NO_STRIGI)
    include_directories(${STRIGI_INCLUDE_DIR})
    set(KIO_EXTRA_LIBS ${KIO_EXTRA_LIBS} ${STRIGI_STREAMANALYZER_LIBRARY} ${STRIGI_STREAMS_LIBRARY})
