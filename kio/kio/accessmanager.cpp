@@ -447,6 +447,7 @@ void AccessManager::AccessManagerPrivate::setMetaDataForRequest(QNetworkRequest 
 
 using namespace KIO::Integration;
 
+#ifndef QT_NO_OPENSSL
 static QSsl::SslProtocol qSslProtocolFromString(const QString& str)
 {
     if (str.compare(QLatin1String("SSLv3"), Qt::CaseInsensitive) == 0) {
@@ -480,6 +481,7 @@ bool KIO::Integration::sslConfigFromMetaData(const KIO::MetaData& metadata, QSsl
 
     return success;
 }
+#endif
 
 CookieJar::CookieJar(QObject* parent)
           :QNetworkCookieJar(parent), d(new CookieJar::CookieJarPrivate)
