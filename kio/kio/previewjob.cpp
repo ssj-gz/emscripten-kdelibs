@@ -27,7 +27,10 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#ifdef Q_OS_UNIX
+#if defined(Q_OS_UNIX) && !defined(Q_OS_EMSCRIPTEN)
+#define USE_IPC
+#endif
+#ifdef USE_IPC
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #endif
@@ -202,7 +205,7 @@ PreviewJob::PreviewJob(const KFileItemList &items,
 
 PreviewJob::~PreviewJob()
 {
-#ifdef Q_OS_UNIX
+#ifdef USE_IPC
     Q_D(PreviewJob);
     if (d->shmaddr) {
         shmdt((char*)d->shmaddr);
@@ -635,7 +638,7 @@ void PreviewJobPrivate::createThumbnail( const QString &pixPath )
     if(sequenceIndex)
         job->addMetaData("sequence-index", QString().setNum(sequenceIndex));
 
-#ifdef Q_OS_UNIX
+#ifdef USE_IPC
     if (shmid == -1)
     {
         if (shmaddr) {
