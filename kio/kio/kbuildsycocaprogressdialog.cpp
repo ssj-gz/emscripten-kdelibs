@@ -17,9 +17,12 @@
 */
 #include "kbuildsycocaprogressdialog.h"
 #include <ksycoca.h>
+#ifndef EMSCRIPTEN
 #include <kprocess.h>
+#endif
 #include <kstandarddirs.h>
 #include <klocale.h>
+#include <kdebug.h>
 #include <QtDBus/QtDBus>
 
 class KBuildSycocaProgressDialogPrivate
@@ -51,9 +54,13 @@ void KBuildSycocaProgressDialog::rebuildKSycoca(QWidget *parent)
   } else {
       // kded not running, e.g. when using keditfiletype out of a KDE session
       QObject::connect(KSycoca::self(), SIGNAL(databaseChanged(QStringList)), &dlg, SLOT(_k_slotFinished()));
+#ifndef EMSCRIPTEN
       KProcess* proc = new KProcess(&dlg);
       (*proc) << KStandardDirs::findExe(KBUILDSYCOCA_EXENAME);
       proc->start();
+#else
+      kWarning() << "Running " << KBUILDSYCOCA_EXENAME << " not supported in Emscripten!";
+#endif
   }
   dlg.exec();
 }
