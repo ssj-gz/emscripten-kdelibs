@@ -277,21 +277,23 @@ qt4_add_resources(kfile_STAT_SRCS kfile/kacleditwidget.qrc)
 
 # kio/kssl/Makefile.am: kssl
 
-set(kssl_STAT_SRCS
-  kssl/sslui.cpp
-  kssl/ksslcertificatebox.cpp
-  kssl/ksslinfodialog.cpp
-# below is what's left of KDE2/3 SSL code, still required for certificate chain validation
-# by hand and for key generation. Network code has been removed.
-  kssl/kopenssl.cpp
-  kssl/kssl.cpp
-  kssl/ksslcertchain.cpp
-  kssl/ksslcertificate.cpp
-  kssl/ksslkeygen.cpp
-  kssl/ksslsettings.cpp
-  kssl/ksslutils.cpp
-  kssl/ksslx509v3.cpp
-)
+if (NOT EMSCRIPTEN)
+    set(kssl_STAT_SRCS
+      kssl/sslui.cpp
+      kssl/ksslcertificatebox.cpp
+      kssl/ksslinfodialog.cpp
+    # below is what's left of KDE2/3 SSL code, still required for certificate chain validation
+    # by hand and for key generation. Network code has been removed.
+      kssl/kopenssl.cpp
+      kssl/kssl.cpp
+      kssl/ksslcertchain.cpp
+      kssl/ksslcertificate.cpp
+      kssl/ksslkeygen.cpp
+      kssl/ksslsettings.cpp
+      kssl/ksslutils.cpp
+      kssl/ksslx509v3.cpp
+    )
+endif()
 
 
 ########### next target ###############
