@@ -25,6 +25,9 @@
 #include <QtGui/QWidget>
 #include <QtCore/QPointer>
 #include <QtNetwork/QHostInfo>
+#ifdef EMSCRIPTEN
+#include "sys/time.h"
+#endif
 
 static const unsigned int max_nums = 8;
 
