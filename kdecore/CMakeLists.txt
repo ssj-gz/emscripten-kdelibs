@@ -233,6 +233,7 @@ set(kdecore_LIB_SRCS
    io/klimitediodevice.cpp
    io/kmessage.cpp
    io/kmountpoint.cpp
+   io/kprocess.cpp
    io/ksavefile.cpp
    io/ktar.cpp
    io/ktempdir.cpp
@@ -284,7 +285,7 @@ set(kdecore_LIB_SRCS
 )
 
 if (NOT EMSCRIPTEN)
-    set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS} io/kdebugdbusiface.cpp io/kprocess.cpp auth/kauthaction.cpp auth/kauthactionreply.cpp auth/kauthactionwatcher.cpp auth/AuthBackend.cpp auth/BackendsManager.cpp auth/HelperProxy.cpp auth/kauthhelpersupport.cpp auth/backends/fake/FakeBackend.cpp auth/backends/fakehelper/FakeHelperProxy.cpp)
+    set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS} io/kdebugdbusiface.cpp auth/kauthaction.cpp auth/kauthactionreply.cpp auth/kauthactionwatcher.cpp auth/AuthBackend.cpp auth/BackendsManager.cpp auth/HelperProxy.cpp auth/kauthhelpersupport.cpp auth/backends/fake/FakeBackend.cpp auth/backends/fakehelper/FakeHelperProxy.cpp)
 endif()
 
 if (NOT KDECORE_NO_KDE3SUPPORT)
