@@ -27,6 +27,9 @@
 
 #include "pic_rw.h"
 #include <netinet/in.h>
+#ifdef EMSCRIPTEN
+#include <arpa/inet.h>
+#endif
 #include <iostream>
 #include <qimage.h>
 
