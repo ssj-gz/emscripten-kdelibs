@@ -498,7 +498,7 @@ install(TARGETS kde4-config ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 ########### next target ###############
 
-if(NOT WINCE)
+if(NOT WINCE AND NOT EMSCRIPTEN)
     # kjs hash stuff for transcript plugin
     set( CREATE_HASH_TABLE ${CMAKE_SOURCE_DIR}/kjs/create_hash_table )
 
@@ -529,7 +529,7 @@ if(NOT WINCE)
 
     install( TARGETS ktranscript DESTINATION ${PLUGIN_INSTALL_DIR} )
 
-endif(NOT WINCE)
+endif(NOT WINCE AND NOT EMSCRIPTEN)
 
 ########### install files ###############
 install( FILES ${CMAKE_CURRENT_BINARY_DIR}/all_languages DESTINATION ${LOCALE_INSTALL_DIR}  )
