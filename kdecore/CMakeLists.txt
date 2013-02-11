@@ -380,11 +380,11 @@ if (NOT EMSCRIPTEN)
     set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS} network/ksslcertificatemanager.cpp util/qtest_kde.cpp)
 endif()
 
-if(NOT KDE_NO_DEPRECATED AND NOT EMSCRIPTEN)
+if(NOT KDE_NO_DEPRECATED)
     set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS}
        util/klibloader.cpp
     )
-endif(NOT KDE_NO_DEPRECATED AND NOT EMSCRIPTEN)
+endif(NOT KDE_NO_DEPRECATED)
 
 if(NOT WIN32)
     set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS} util/kshareddatacache.cpp)
