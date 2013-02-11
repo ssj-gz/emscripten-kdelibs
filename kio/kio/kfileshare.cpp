@@ -255,6 +255,7 @@ bool KFileShare::setShared( const QString& path, bool shared )
     else
         args << "--remove";
     args << path ;
+#ifndef EMSCRIPTEN
     int ec = QProcess::execute( exe, args ); // should be ok, the perl script terminates fast
     kDebug(7000) << "exitCode=" << ec;
     bool ok = !ec;
@@ -292,6 +293,10 @@ bool KFileShare::setShared( const QString& path, bool shared )
     }
 
     return ok;
+#else
+    kWarning() << "Could not execute " << exe;
+    return false;
+#endif
 }
 
 //#include "kfileshare.moc"
