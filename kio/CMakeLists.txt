@@ -19,7 +19,6 @@ endif(NOT SOPRANO_FOUND)
 
 if(OPENSSL_FOUND)
    set(KSSL_HAVE_SSL 1)
-message("Bloop")
    include_directories(${OPENSSL_INCLUDE_DIR})
 endif(OPENSSL_FOUND)
 
