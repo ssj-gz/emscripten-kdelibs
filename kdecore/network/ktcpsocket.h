@@ -23,6 +23,8 @@
 
 #include <QtNetwork/QSslSocket>
 #include <QtNetwork/QSslConfiguration>
+#include <QtNetwork/QNetworkProxy>
+#include <QtCore/QIODevice>
 
 #include "kdecore_export.h"
 
@@ -379,18 +381,26 @@ Q_SIGNALS:
 #endif
 
 public Q_SLOTS:
+#ifndef QT_NO_OPENSSL
     void ignoreSslErrors();
     void startClientEncryption();
+#endif
     // void startServerEncryption(); //not implemented
 private:
     Q_PRIVATE_SLOT(d, void reemitReadyRead())
     Q_PRIVATE_SLOT(d, void reemitSocketError(QAbstractSocket::SocketError))
+#ifndef QT_NO_OPENSSL
     Q_PRIVATE_SLOT(d, void reemitSslErrors(const QList<QSslError> &))
+#endif
     Q_PRIVATE_SLOT(d, void reemitStateChanged(QAbstractSocket::SocketState))
+#ifndef QT_NO_OPENSSL
     Q_PRIVATE_SLOT(d, void reemitModeChanged(QSslSocket::SslMode))
+#endif
 
 //debugging H4X
+#ifndef QT_NO_OPENSSL
     void showSslErrors();
+#endif
 
     friend class KTcpSocketPrivate;
     KTcpSocketPrivate *const d;

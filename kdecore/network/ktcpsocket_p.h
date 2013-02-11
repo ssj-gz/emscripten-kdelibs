@@ -20,6 +20,7 @@
 #ifndef KTCPSOCKET_P_H
 #define KTCPSOCKET_P_H
 
+#ifndef QT_NO_OPENSSL
 class KSslErrorUiData::Private
 {
 public:
@@ -35,6 +36,7 @@ public:
     int usedBits;
     int bits;
 };
+#endif
 
 
 #endif // KTCPSOCKET_P_H

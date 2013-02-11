@@ -32,6 +32,9 @@
 #include <QtNetwork/QSslCipher>
 #include <QtNetwork/QHostAddress>
 #include <QtNetwork/QNetworkProxy>
+#ifdef QT_NO_OPENSSL
+#include <QtNetwork/QTcpSocket>
+#endif
 
 static KTcpSocket::SslVersion kSslVersionFromQ(QSsl::SslProtocol protocol)
 {
@@ -93,6 +96,7 @@ static QSsl::SslProtocol qSslProtocolFromK(KTcpSocket::SslVersion sslVersion)
 }
 
 
+#ifndef QT_NO_OPENSSL
 //cipher class converter KSslCipher -> QSslCipher
 class CipherCc
 {
@@ -255,6 +259,7 @@ QSslCertificate KSslError::certificate() const
 {
     return d->certificate;
 }
+#endif
 
 
 class KTcpSocketPrivate
@@ -266,7 +271,9 @@ public:
        emittedReadyRead(false)
     {
         // create the instance, which sets Qt's static internal cert set to empty.
+#ifndef QT_NO_OPENSSL
         KSslCertificateManager::self();
+#endif
     }
 
     KTcpSocket::State state(QAbstractSocket::SocketState s)
@@ -290,6 +297,7 @@ public:
         }
     }
 
+#ifndef QT_NO_OPENSSL
     KTcpSocket::EncryptionMode encryptionMode(QSslSocket::SslMode mode)
     {
         switch (mode) {
@@ -301,6 +309,7 @@ public:
             return KTcpSocket::UnencryptedMode;
         }
     }
+#endif
 
     KTcpSocket::Error errorFromAbsSocket(QAbstractSocket::SocketError e)
     {
@@ -340,6 +349,7 @@ public:
         emit q->error(errorFromAbsSocket(e));
     }
 
+#ifndef QT_NO_OPENSSL
     void reemitSslErrors(const QList<QSslError> &errors)
     {
         q->showSslErrors(); //H4X
@@ -349,16 +359,19 @@ public:
         }
         emit q->sslErrors(kErrors);
     }
+#endif
 
     void reemitStateChanged(QAbstractSocket::SocketState s)
     {
         emit q->stateChanged(state(s));
     }
 
+#ifndef QT_NO_OPENSSL
     void reemitModeChanged(QSslSocket::SslMode m)
     {
         emit q->encryptionModeChanged(encryptionMode(m));
     }
+#endif
 
     // This method is needed because we might emit readyRead() due to this QIODevice
     // having some data buffered, so we need to care about blocking, too.
@@ -372,6 +385,7 @@ public:
         }
     }
 
+#ifndef QT_NO_OPENSSL
     void maybeLoadCertificates()
     {
         if (!certificatesLoaded) {
@@ -379,14 +393,19 @@ public:
             certificatesLoaded = true;
         }
     }
+#endif
 
     KTcpSocket *const q;
     bool certificatesLoaded;
     bool emittedReadyRead;
+#ifndef QT_NO_OPENSSL
     QSslSocket sock;
     QList<KSslCipher> ciphers;
     KTcpSocket::SslVersion advertisedSslVersion;
     CipherCc ccc;
+#else
+    QTcpSocket sock;
+#endif
 };
 
 
@@ -394,7 +413,9 @@ KTcpSocket::KTcpSocket(QObject *parent)
  : QIODevice(parent),
    d(new KTcpSocketPrivate(this))
 {
+#ifndef QT_NO_OPENSSL
     d->advertisedSslVersion = SslV3;
+#endif
 
     connect(&d->sock, SIGNAL(aboutToClose()), this, SIGNAL(aboutToClose()));
     connect(&d->sock, SIGNAL(bytesWritten(qint64)), this, SIGNAL(bytesWritten(qint64)));
@@ -551,6 +572,7 @@ KTcpSocket::Error KTcpSocket::error() const
 }
 
 
+#ifndef QT_NO_OPENSSL
 QList<KSslError> KTcpSocket::sslErrors() const
 {
     //### pretty slow; also consider throwing out duplicate error codes. We may get
@@ -561,7 +583,7 @@ QList<KSslError> KTcpSocket::sslErrors() const
         ret.append(KSslError(e));
     return ret;
 }
-
+#endif
 
 bool KTcpSocket::flush()
 {
@@ -652,6 +674,7 @@ bool KTcpSocket::waitForDisconnected(int msecs)
 
 ////////////////////////////// public methods from QSslSocket
 
+#ifndef QT_NO_OPENSSL
 void KTcpSocket::addCaCertificate(const QSslCertificate &certificate)
 {
     d->maybeLoadCertificates();
@@ -696,7 +719,6 @@ void KTcpSocket::connectToHostEncrypted(const QString &hostName, quint16 port, O
     d->sock.connectToHostEncrypted(hostName, port, openMode);
     setOpenMode(d->sock.openMode() | QIODevice::Unbuffered);
 }
-
 
 QSslCertificate KTcpSocket::localCertificate() const
 {
@@ -761,7 +783,6 @@ void KTcpSocket::setVerificationPeerName(const QString& hostName)
 #endif
 }
 
-
 void KTcpSocket::setPrivateKey(const KSslKey &key)
 {
     // We cannot map KSslKey::Algorithm:Dh to anything in QSsl::KeyAlgorithm.
@@ -801,6 +822,7 @@ KTcpSocket::EncryptionMode KTcpSocket::encryptionMode() const
 {
     return d->encryptionMode(d->sock.mode());
 }
+#endif
 
 QVariant KTcpSocket::socketOption(QAbstractSocket::SocketOption options) const
 {
@@ -812,6 +834,7 @@ void KTcpSocket::setSocketOption(QAbstractSocket::SocketOption options, const QV
     d->sock.setSocketOption(options, value);
 }
 
+#ifndef QT_NO_OPENSSL
 QSslConfiguration KTcpSocket::sslConfiguration() const
 {
     return d->sock.sslConfiguration();
@@ -1146,6 +1169,7 @@ KSslErrorUiData &KSslErrorUiData::operator=(const KSslErrorUiData &other)
     *d = *other.d;
     return *this;
 }
+#endif
 
 
 #include "ktcpsocket.moc"
