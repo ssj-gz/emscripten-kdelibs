@@ -309,6 +309,7 @@ if (NOT KDECORE_NO_KDE3SUPPORT)
 endif (NOT KDECORE_NO_KDE3SUPPORT)
 
 set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS}
+   network/klocalsocket.cpp
    localization/kcatalog.cpp
    localization/kcurrencycode.cpp
    localization/kcharsets.cpp
@@ -372,7 +373,7 @@ set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS}
 )
 
 if (NOT EMSCRIPTEN)
-    set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS} network/klocalsocket.cpp network/ksocketfactory.cpp network/ksslcertificatemanager.cpp network/ktcpsocket.cpp util/klauncher_iface.cpp util/klibrary.cpp util/qtest_kde.cpp)
+    set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS} network/ksocketfactory.cpp network/ksslcertificatemanager.cpp network/ktcpsocket.cpp util/klauncher_iface.cpp util/klibrary.cpp util/qtest_kde.cpp)
 endif()
 
 if(NOT KDE_NO_DEPRECATED AND NOT EMSCRIPTEN)
