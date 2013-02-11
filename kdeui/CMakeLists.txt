@@ -60,8 +60,10 @@ configure_file(
 )
 
 add_subdirectory( about )
-add_subdirectory( tests )
-add_subdirectory( sonnet/tests )
+if (KDE4_BUILD_TESTS)
+    add_subdirectory( tests )
+    add_subdirectory( sonnet/tests )
+endif()
 
 ########### next target ###############
 set(kdeui_LIB_SRCS
