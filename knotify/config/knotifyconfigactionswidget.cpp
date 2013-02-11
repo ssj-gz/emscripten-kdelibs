@@ -21,7 +21,9 @@
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 
+#ifndef EMSCRIPTEN
 #include <phonon/mediaobject.h>
+#endif
 
 KNotifyConfigActionsWidget::KNotifyConfigActionsWidget( QWidget * parent )
 	: QWidget(parent)
@@ -135,9 +137,11 @@ void KNotifyConfigActionsWidget::slotPlay(  )
 		if ( search.isEmpty() )*/
 		soundURL = KUrl::fromPath( KStandardDirs::locate( "sound", soundString ) );
 	}
+#ifndef EMSCRIPTEN
 	Phonon::MediaObject* media = Phonon::createPlayer( Phonon::NotificationCategory, soundURL );
 	media->play();
 	connect(media, SIGNAL(finished()), media, SLOT(deleteLater()));
+#endif
 }
 
 void KNotifyConfigActionsWidget::slotKTTSComboChanged()
