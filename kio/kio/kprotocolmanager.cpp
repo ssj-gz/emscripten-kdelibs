@@ -764,10 +764,12 @@ QString KProtocolManager::defaultUserAgent( const QString &_modifiers )
 
     agentStr.replace(QL1S("%appversion%"), appName, Qt::CaseInsensitive);
 
+#ifndef QT_NO_OPENSSL
     if (!QSslSocket::supportsSsl())
       agentStr.replace(QL1S("%security%"), QL1S("N"), Qt::CaseInsensitive);
     else
       agentStr.remove(QL1S("%security%"), Qt::CaseInsensitive);
+#endif
 
     if (sysInfoFound)
     {
