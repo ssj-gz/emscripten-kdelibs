@@ -29,6 +29,8 @@
 #include <QtCore/QStringList>
 #include <QtCore/QDate>
 
+#ifndef QT_NO_OPENSSL
+
 class QSslCertificate;
 class KSslCertificateRulePrivate;
 class KSslCertificateManagerPrivate;
@@ -95,5 +97,6 @@ private:
     KSslCertificateManagerPrivate *const d;
 };
 
+#endif
 
 #endif

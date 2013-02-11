@@ -36,6 +36,7 @@
  */
 
 
+#ifndef QT_NO_OPENSSL
 class KSslKeyPrivate;
 
 class KDECORE_EXPORT KSslKey {
@@ -126,6 +127,7 @@ public:
 private:
     KSslErrorPrivate *const d;
 };
+#endif
 
 
 //consider killing more convenience functions with huge signatures
@@ -259,8 +261,10 @@ public:
     void disconnectFromHost();
     Error error() const; //### QAbstractSocket's model is strange. error() should be related to the
                          //current state and *NOT* just report the last error if there was one.
+#ifndef QT_NO_OPENSSL
     QList<KSslError> sslErrors() const; //### the errors returned can only have a subset of all
                                 //possible QSslError::SslError enum values depending on backend
+#endif
     bool flush();
     bool isValid() const;
     QHostAddress localAddress() const;
@@ -288,6 +292,7 @@ public:
     bool waitForConnected(int msecs = 30000);
     bool waitForDisconnected(int msecs = 30000);
 
+#ifndef QT_NO_OPENSSL
     //from QSslSocket
     void addCaCertificate(const QSslCertificate &certificate);
 //    bool addCaCertificates(const QString &path, QSsl::EncodingFormat format = QSsl::Pem,
@@ -295,6 +300,7 @@ public:
     void addCaCertificates(const QList<QSslCertificate> &certificates);
     QList<QSslCertificate> caCertificates() const;
     QList<KSslCipher> ciphers() const;
+
     void connectToHostEncrypted(const QString &hostName, quint16 port, OpenMode openMode = ReadWrite);
     // bool isEncrypted() const { return encryptionMode() != UnencryptedMode }
     QSslCertificate localCertificate() const;
@@ -315,6 +321,7 @@ public:
     SslVersion negotiatedSslVersion() const;     //negotiated version; downgrades are possible.
     QString negotiatedSslVersionName() const;
     bool waitForEncrypted(int msecs = 30000);
+#endif
 
     EncryptionMode encryptionMode() const;
 
@@ -341,6 +348,7 @@ public:
      *
      * @since 4.8.4
      */
+#ifndef QT_NO_OPENSSL
     QSslConfiguration sslConfiguration() const;
 
     /**
@@ -349,6 +357,7 @@ public:
      * @since 4.8.4
      */
     void setSslConfiguration(const QSslConfiguration& configuration);
+#endif
 
 Q_SIGNALS:
     //from QAbstractSocket
@@ -365,7 +374,9 @@ Q_SIGNALS:
     //from QSslSocket
     void encrypted();
     void encryptionModeChanged(EncryptionMode);
+#ifndef QT_NO_OPENSSL
     void sslErrors(const QList<KSslError> &errors);
+#endif
 
 public Q_SLOTS:
     void ignoreSslErrors();
@@ -386,6 +397,7 @@ private:
 };
 
 
+#ifndef QT_NO_OPENSSL
 /**
  * This class can hold all the necessary data from a KTcpSocket to ask the user
  * to continue connecting in the face of SSL errors.
@@ -420,6 +432,7 @@ private:
     friend class Private;
     Private *const d;
 };
+#endif
 
 
 #endif // KTCPSOCKET_H

@@ -150,6 +150,7 @@ public:
         sendSslMetaData();
     }
 
+#ifndef QT_NO_OPENSSL
     void sendSslMetaData()
     {
         MetaData::ConstIterator it = sslMetaData.constBegin();
@@ -161,6 +162,7 @@ public:
     SslResult startTLSInternal(KTcpSocket::SslVersion sslVersion,
                                const QSslConfiguration& configuration = QSslConfiguration(),
                                int waitForEncryptedTimeout = -1);
+#endif
 
     TCPSlaveBase* q;
 
@@ -173,6 +175,7 @@ public:
     quint16 port;
     QByteArray serviceName;
 
+#ifndef QT_NO_OPENSSL
     KSSLSettings sslSettings;
     bool usingSSL;
     bool autoSSL;
@@ -181,6 +184,7 @@ public:
     QList<KSslError> sslErrors;
 
     MetaData sslMetaData;
+#endif
 };
 
 
