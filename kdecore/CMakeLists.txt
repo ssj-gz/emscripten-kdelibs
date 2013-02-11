@@ -364,6 +364,7 @@ set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS}
    util/kallocator.cpp
    util/kautostart.cpp
    util/kdedmodule.cpp
+   util/klauncher_iface.cpp
    util/kdeversion.cpp
    util/kmacroexpander.cpp
    util/kpluginfactory.cpp
@@ -375,7 +376,7 @@ set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS}
 )
 
 if (NOT EMSCRIPTEN)
-    set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS} network/ksslcertificatemanager.cpp util/klauncher_iface.cpp util/klibrary.cpp util/qtest_kde.cpp)
+    set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS} network/ksslcertificatemanager.cpp util/klibrary.cpp util/qtest_kde.cpp)
 endif()
 
 if(NOT KDE_NO_DEPRECATED AND NOT EMSCRIPTEN)
