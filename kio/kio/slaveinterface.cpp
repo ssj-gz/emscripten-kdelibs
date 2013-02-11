@@ -30,7 +30,9 @@
 #include <unistd.h>
 #include <signal.h>
 #include <klocale.h>
+#ifndef QT_NO_OPENSSL
 #include <ksslinfodialog.h>
+#endif
 #include <kmessagebox.h>
 #include <time.h>
 #include <QtDBus/QtDBus>
