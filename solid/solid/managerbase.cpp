@@ -73,7 +73,8 @@ void Solid::ManagerBasePrivate::loadBackends()
 
 #        elif defined(Q_OS_UNIX) && !defined(Q_OS_LINUX)
             m_backends << new Solid::Backends::Hal::HalManager(0);
-
+#        elif defined(Q_OS_EMSCRIPTEN)
+                m_backends << new Solid::Backends::Fake::FakeManager(0, solidFakeXml);
 #        elif defined(Q_OS_LINUX)
             bool solidHalLegacyEnabled
                 = QString::fromLocal8Bit(qgetenv("SOLID_HAL_LEGACY")).toInt()==1;
