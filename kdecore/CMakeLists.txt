@@ -168,7 +168,7 @@ if (EMSCRIPTEN)
       kernel/kstandarddirs_unix.cpp
       localization/klocale_unix.cpp
       network/klocalsocket_unix.cpp
-      network/netsupp.cpp
+      #network/netsupp.cpp
       io/klockfile_unix.cpp
       util/kshell_unix.cpp
       util/kuser_unix.cpp
