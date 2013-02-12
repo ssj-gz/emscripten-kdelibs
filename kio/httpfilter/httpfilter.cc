@@ -18,6 +18,10 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifdef EMSCRIPTEN
+#include <cstddef>
+#endif
+
 #include "httpfilter.h"
 #include <kgzipfilter.h>
 #include <kdebug.h>

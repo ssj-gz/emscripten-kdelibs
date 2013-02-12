@@ -21,6 +21,10 @@
 #ifndef KDELIBS_FTP_H
 #define KDELIBS_FTP_H
 
+#ifdef EMSCRIPTEN
+#include <cstddef>
+#endif
+
 #include <config.h>
 
 #include <sys/types.h>

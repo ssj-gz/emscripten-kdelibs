@@ -44,6 +44,7 @@
 #include <cerrno>
 #include <cstdlib>
 #include <cstring>
+#include <cstddef>
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>
