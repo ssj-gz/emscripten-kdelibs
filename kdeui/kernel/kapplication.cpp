@@ -517,12 +517,14 @@ void KApplicationPrivate::init(bool GUIenabled)
   extern void qDBusBindToApplication();
   qDBusBindToApplication();
   QDBusConnectionInterface *bus = 0;
+#ifndef EMSCRIPTEN
   if (!QDBusConnection::sessionBus().isConnected() || !(bus = QDBusConnection::sessionBus().interface())) {
       kFatal(240) << "Session bus not found" << endl <<
                   "To circumvent this problem try the following command (with Linux and bash)" << endl <<
                   "export $(dbus-launch)";
       ::exit(125);
   }
+#endif
 
   extern bool s_kuniqueapplication_startCalled;
   if ( bus && !s_kuniqueapplication_startCalled ) // don't register again if KUniqueApplication did so already
