@@ -51,7 +51,10 @@
 #include <kdesktopfile.h>
 #include <kmountpoint.h>
 #include <kconfiggroup.h>
-#ifndef Q_OS_WIN
+#if (defined(Q_OS_WIN)) || (defined(Q_OS_EMSCRIPTEN))
+#define NO_SAMBA
+#endif
+#ifndef NO_SAMBA
 #include <knfsshare.h>
 #include <ksambashare.h>
 #endif
@@ -972,7 +975,7 @@ QStringList KFileItem::overlays() const
         names.append("hidden");
     }
 
-#ifndef Q_OS_WIN
+#ifndef NO_SAMBA
     if( S_ISDIR( d->m_fileMode ) && d->m_bIsLocalUrl)
     {
         if (KSambaShare::instance()->isDirectoryShared( d->m_url.toLocalFile() ) ||
