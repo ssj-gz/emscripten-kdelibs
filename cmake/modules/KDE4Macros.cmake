@@ -659,6 +659,10 @@ macro (KDE4_ADD_PLUGIN _target_NAME )
       endif (arg STREQUAL "MODULE")
    endforeach(arg)
 
+   if (STATIC_LIBRARY)
+      set(_add_lib_param STATIC)
+   endif()
+
    if(_with_pre)
       list(REMOVE_ITEM _args "WITH_PREFIX")
    endif(_with_pre)

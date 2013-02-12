@@ -24,7 +24,11 @@
 #include <kpluginfactory.h>
 
 K_PLUGIN_FACTORY(KFileModuleFactory, registerPlugin<KFileModule>();)
+#ifndef QT_STATICPLUGIN
 K_EXPORT_PLUGIN(KFileModuleFactory("kfilemodule"))
+#else
+K_EXPORT_STATIC_PLUGIN(KFileModuleFactory("kfilemodule"), KFileModuleFactory)
+#endif
 
 KFileModule::KFileModule(QObject* parent, const QVariantList&)
     : KAbstractFileModule(parent)
