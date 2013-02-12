@@ -169,7 +169,7 @@ if (EMSCRIPTEN)
       localization/klocale_unix.cpp
       network/klocalsocket_unix.cpp
       #network/netsupp.cpp
-      io/klockfile_unix.cpp
+      io/klockfile_emscripten.cpp
       util/kshell_unix.cpp
       util/kuser_unix.cpp
       util/kmacroexpander_unix.cpp
