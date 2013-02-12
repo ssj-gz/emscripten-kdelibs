@@ -173,6 +173,7 @@ if (EMSCRIPTEN)
       util/kshell_unix.cpp
       util/kuser_unix.cpp
       util/kmacroexpander_unix.cpp
+      fakes.c
    )
 endif()
 

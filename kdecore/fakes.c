@@ -37,6 +37,10 @@
 
 #include <kdecore_export.h>
 
+#ifdef EMSCRIPTEN
+#include <stddef.h>
+#endif
+
 #include <config.h>
 
 
