@@ -21,7 +21,9 @@
 #include "kauthhelpersupport.h"
 
 #include <cstdlib>
+#ifndef EMSCRIPTEN
 #include <syslog.h>
+#endif
 
 #include <QCoreApplication>
 #include <QTimer>
@@ -42,11 +44,15 @@ static bool remote_dbg = false;
 
 int HelperSupport::helperMain(int argc, char **argv, const char *id, QObject *responder)
 {
+#ifndef EMSCRIPTEN
     openlog(id, 0, LOG_USER);
+#endif
     qInstallMsgHandler(&HelperSupport::helperDebugHandler);
 
     if (!BackendsManager::helperProxy()->initHelper(QString::fromLatin1(id))) {
+#ifndef EMSCRIPTEN
         syslog(LOG_DEBUG, "Helper initialization failed");
+#endif
         return -1;
     }
 
@@ -70,6 +76,7 @@ int HelperSupport::helperMain(int argc, char **argv, const char *id, QObject *re
 void HelperSupport::helperDebugHandler(QtMsgType type, const char *msg)
 {
     if (!remote_dbg) {
+#ifndef EMSCRIPTEN
         int level = LOG_DEBUG;
         switch (type) {
         case QtDebugMsg:
@@ -84,6 +91,7 @@ void HelperSupport::helperDebugHandler(QtMsgType type, const char *msg)
             break;
         }
         syslog(level, "%s", msg);
+#endif
     } else {
         BackendsManager::helperProxy()->sendDebugMessage(type, msg);
     }

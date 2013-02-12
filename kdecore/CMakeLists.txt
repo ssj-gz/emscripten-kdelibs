@@ -40,10 +40,8 @@ configure_file(compression/config-compression.h.cmake ${CMAKE_CURRENT_BINARY_DIR
 include_directories( ${CMAKE_CURRENT_BINARY_DIR}/compression )
 
 # This file handles all the logic for compiling KAuth's backends
-if (NOT CMAKE_SYSTEM_NAME MATCHES Emscripten)
-    include(auth/ConfigureChecks.cmake)
-    include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/auth/ )
-endif()
+include(auth/ConfigureChecks.cmake)
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/auth/ )
 
 # Configure a small file to tell BackendsManager what to use
 configure_file(auth/BackendsConfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/BackendsConfig.h)
@@ -266,6 +264,15 @@ set(kdecore_LIB_SRCS
    kernel/kcomponentdata.cpp
    kernel/kstandarddirs.cpp
    kernel/ktoolinvocation.cpp
+   auth/kauthaction.cpp
+   auth/kauthactionreply.cpp
+   auth/kauthactionwatcher.cpp
+   auth/AuthBackend.cpp
+   auth/BackendsManager.cpp
+   auth/HelperProxy.cpp
+   auth/kauthhelpersupport.cpp
+   auth/backends/fake/FakeBackend.cpp
+   auth/backends/fakehelper/FakeHelperProxy.cpp
    services/kfoldermimetype.cpp
    services/kmimetypefactory.cpp
    services/kmimemagicrule.cpp
@@ -300,7 +307,7 @@ set(kdecore_LIB_SRCS
 )
 
 if (NOT EMSCRIPTEN)
-    set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS} auth/kauthaction.cpp auth/kauthactionreply.cpp auth/kauthactionwatcher.cpp auth/AuthBackend.cpp auth/BackendsManager.cpp auth/HelperProxy.cpp auth/kauthhelpersupport.cpp auth/backends/fake/FakeBackend.cpp auth/backends/fakehelper/FakeHelperProxy.cpp)
+    set(kdecore_LIB_SRCS ${kdecore_LIB_SRCS} )
 endif()
 
 if (NOT KDECORE_NO_KDE3SUPPORT)
