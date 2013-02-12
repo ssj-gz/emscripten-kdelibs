@@ -384,7 +384,11 @@ void KUniqueApplication::Private::_k_newInstanceNoFork()
 
 bool KUniqueApplication::restoringSession()
 {
-  return d->firstInstance && isSessionRestored();
+  return d->firstInstance 
+#ifndef EMSCRIPTEN
+      && isSessionRestored()
+#endif
+      ;
 }
 
 int KUniqueApplication::newInstance()
