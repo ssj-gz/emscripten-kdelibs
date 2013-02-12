@@ -164,6 +164,20 @@ if (UNIX)
    endif (NOT KDECORE_NO_KDE3SUPPORT)
 endif (UNIX)
 
+if (EMSCRIPTEN)
+   set(kdecore_OPTIONAL_SRCS ${kdecore_OPTIONAL_SRCS}
+      kernel/ktoolinvocation_emscripten.cpp
+      kernel/kstandarddirs_unix.cpp
+      localization/klocale_unix.cpp
+      network/klocalsocket_unix.cpp
+      network/netsupp.cpp
+      io/klockfile_unix.cpp
+      util/kshell_unix.cpp
+      util/kuser_unix.cpp
+      util/kmacroexpander_unix.cpp
+   )
+endif()
+
 add_subdirectory( kconfig_compiler )
 if (KDE4_BUILD_TESTS)
     add_subdirectory( tests )
