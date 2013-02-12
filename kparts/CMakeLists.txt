@@ -1,6 +1,8 @@
 project(kparts)
 
-add_subdirectory( tests )
+if (KDE4_BUILD_TESTS)
+    add_subdirectory( tests )
+endif()
 
 include_directories(${KDE4_KIO_INCLUDES} ${kparts_BINARY_DIR})
 if(HAVE_NEPOMUK)
