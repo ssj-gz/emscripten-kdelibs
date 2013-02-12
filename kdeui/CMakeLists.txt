@@ -169,6 +169,7 @@ set(kdeui_LIB_SRCS
  jobs/kabstractwidgetjobtracker.cpp
  jobs/kwidgetjobtracker.cpp
  jobs/kstatusbarjobtracker.cpp
+ jobs/kuiserverjobtracker.cpp
  kernel/kapplication.cpp
  kernel/kclipboard.cpp
  kernel/kstyle.cpp
@@ -302,7 +303,7 @@ if (NOT EMSCRIPTEN)
      kernel/kuniqueapplication.cpp
      kernel/ksessionmanager.cpp
      xmlgui/kmainwindowiface.cpp
-     jobs/kuiserverjobtracker.cpp)
+     )
 endif()
 
 if(NOT KDE_NO_DEPRECATED)
