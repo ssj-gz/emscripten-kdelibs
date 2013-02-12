@@ -190,8 +190,19 @@ static int initKConfigGroupGui()
     return 42;                  // because 42 is nicer than 1 or 0
 }
 
+#ifndef EMSCRIPTEN
 #ifdef Q_CONSTRUCTOR_FUNCTION
 Q_CONSTRUCTOR_FUNCTION(initKConfigGroupGui)
 #else
 static int dummyKConfigGroupGui = initKConfigGroupGui();
+#endif
+#else
+// There's some jiggery-pokery with kconfiggroup that 'hooks' into kdeui via a shared variable
+// (_kde_internal_KConfigGroupGui), which is supposed to be set by kdeui when it is statically initialised.
+// However - clang seems to be 'smart' enough to realise that this whole source file is unused,
+// and so it skips the static initialisation and so _kde_internal_KConfigGroupGui is never set.
+// To work around this, give dummyKConfigGroupGui external linkage, and 'use' it inside kapplication, which
+// all KDE apps shoud be using.  This forces the static initialisation, and so _kde_internal_KConfigGroupGui 
+// is set correctly.  This was an utter bastard to figure out.
+int dummyKConfigGroupGui = initKConfigGroupGui();
 #endif

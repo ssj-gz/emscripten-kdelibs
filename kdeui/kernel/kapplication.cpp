@@ -137,6 +137,7 @@ static int kde_x_errhandler( Display *dpy, XErrorEvent *err )
 #ifdef Q_WS_WIN
 void KApplication_init_windows();
 #endif
+extern int dummyKConfigGroupGui;
 
 /*
   Private data to make keeping binary compatibility easier
@@ -829,6 +830,10 @@ bool KApplication::sessionSaving() const
 
 void KApplicationPrivate::parseCommandLine( )
 {
+#ifdef EMSCRIPTEN
+    // See comments in kconfiggroupgui.cpp 
+    qDebug() << "Forcing initialisation of dummyKConfigGroupGui:" << dummyKConfigGroupGui;
+#endif
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs("kde");
 
     if (args && args->isSet("style"))
