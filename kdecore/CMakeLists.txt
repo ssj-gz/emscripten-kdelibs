@@ -165,7 +165,7 @@ endif (UNIX)
 if (EMSCRIPTEN)
    set(kdecore_OPTIONAL_SRCS ${kdecore_OPTIONAL_SRCS}
       kernel/ktoolinvocation_emscripten.cpp
-      kernel/kstandarddirs_unix.cpp
+      kernel/kstandarddirs_emscripten.cpp
       localization/klocale_unix.cpp
       network/klocalsocket_unix.cpp
       #network/netsupp.cpp

@@ -1693,6 +1693,20 @@ void KStandardDirs::addResourcesFrom_krcdirs()
 
 void KStandardDirs::addKDEDefaults()
 {
+#ifdef EMSCRIPTEN
+//#if 0
+    uint index = 0;
+    while (types_indices[index] != -1) {
+        addResourceType(types_string + types_indices[index], 0, types_string + types_indices[index+1], true);
+        index+=2;
+    }
+#ifdef EMSCRIPTEN_NATIVE
+    addPrefix(QDir::currentPath());
+#else
+    addPrefix(QString::fromAscii("/"));
+#endif
+    return;
+#else
     addResourcesFrom_krcdirs();
 
     QStringList kdedirList;
@@ -1877,6 +1891,7 @@ void KStandardDirs::addKDEDefaults()
 
     addResourceType("autostart", "xdgconf-autostart", "/"); // merge them, start with xdg autostart
     addResourceType("autostart", NULL, "share/autostart"); // KDE ones are higher priority
+#endif
 }
 
 static QStringList lookupProfiles(const QString &mapFile)
