@@ -6,12 +6,18 @@ set(EMSCRIPTEN_SYSTEM $ENV{EMSCRIPTEN_ROOT_PATH}/system/)
 SET(CMAKE_SYSTEM_NAME Emscripten)
 SET(CMAKE_SYSTEM_PROCESSOR Emscripten)
 SET (CMAKE_CROSSCOMPILING   TRUE)
+
+# We can't use FindSDL, alas, as CMake will not look on the host system.  This will have to do instead :.
+execute_process(COMMAND sdl-config "--libs"
+                OUTPUT_VARIABLE SDL_LINK_FLAGS)
+STRING(REGEX REPLACE "(\r?\n)+$" "" SDL_LINK_FLAGS "${SDL_LINK_FLAGS}")
+
  
 # which compilers to use for C and C++
 SET(CMAKE_C_COMPILER ccache clang)
 SET(CMAKE_CXX_COMPILER ccache clang++)
-SET(CMAKE_C_LINK_EXECUTABLE "clang -o <TARGET> <LINK_FLAGS> -lrt -lz -lpthread <OBJECTS> <LINK_LIBRARIES>")
-SET(CMAKE_CXX_LINK_EXECUTABLE "clang++ -o <TARGET> <LINK_FLAGS> -lrt -lz -lpthread <OBJECTS> <LINK_LIBRARIES>")
+SET(CMAKE_C_LINK_EXECUTABLE "clang -o <TARGET> <LINK_FLAGS> <OBJECTS> <LINK_LIBRARIES> ${SDL_LINK_FLAGS} -lrt -lz -lpthread ")
+SET(CMAKE_CXX_LINK_EXECUTABLE "clang++ -o <TARGET> <LINK_FLAGS> <OBJECTS> <LINK_LIBRARIES> ${SDL_LINK_FLAGS} -lrt -lz -lpthread ")
 SET(CMAKE_CXX_CREATE_SHARED_LIBRARY  "clang++ -o <TARGET> <LINK_FLAGS> -lz -lpthread <OBJECTS> <LINK_LIBRARIES>")
 SET(CMAKE_CXX_CREATE_STATIC_LIBRARY  "ar qs <TARGET> <OBJECTS> ")
 set(CMAKE_CXX_FLAGS "-g `sdl-config --cflags` -Qunused-arguments -fcolor-diagnostics" CACHE STRING "" FORCE)
