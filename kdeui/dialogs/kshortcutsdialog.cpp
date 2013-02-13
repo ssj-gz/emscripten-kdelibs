@@ -169,10 +169,13 @@ bool KShortcutsDialog::configure(bool saveSettings)
     if (saveSettings) {
         connect(this, SIGNAL(okClicked()), this, SLOT(save()));
     }
+#ifndef QT_NO_LOCALEVENTLOOP
     if (isModal()) {
         int retcode = exec();
         return retcode;
-    } else {
+    } else 
+#endif
+    {
         show();
         return false;
     }
