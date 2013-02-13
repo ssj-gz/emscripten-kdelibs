@@ -970,9 +970,12 @@ endmacro(_KDE4_ADD_MANIFEST)
 
 
 macro (KDE4_ADD_EXECUTABLE _target_NAME)
-
+    
    kde4_check_executable_params( _SRCS _nogui _test ${ARGN})
-
+   if (EMSCRIPTEN AND _kdeBootStrapping)
+       set(_SRCS ${_SRCS};${kdelibs_SOURCE_DIR}/emscripten-stuff/emscripten-dummy-callbacks.cpp)
+   endif()
+    
    set(_add_executable_param)
 
    # determine additional parameters for add_executable()
