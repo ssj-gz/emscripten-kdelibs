@@ -432,7 +432,7 @@ endif (NOT Q_WS_X11 AND NOT Q_WS_QWS)
 
 kde4_add_library(kdecore ${LIBRARY_TYPE} ${kdecore_LIB_SRCS})
 
-target_link_libraries(kdecore ${QT_QTCORE_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QT_QTDBUS_LIBRARY} ${QT_QTXML_LIBRARY} ${ZLIB_LIBRARY} ${kdecore_OPTIONAL_LIBS})
+target_link_libraries(kdecore ${QT_QTNETWORK_LIBRARY} ${QT_QTDBUS_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTCORE_LIBRARY} ${ZLIB_LIBRARY} ${kdecore_OPTIONAL_LIBS})
 
 if(WINCE)
   target_link_libraries(kdecore ${WCECOMPAT_LIBRARIES} Ceshell.lib)
@@ -522,6 +522,7 @@ configure_file(localization/all_languages.desktop ${CMAKE_CURRENT_BINARY_DIR}/al
 
 kde4_add_executable(kde4-config NOGUI kde-config.cpp )
 
+message("gloop: ${KDE4_KDECORE_LIBS}")
 target_link_libraries(kde4-config ${KDE4_KDECORE_LIBS})
 
 install(TARGETS kde4-config ${INSTALL_TARGETS_DEFAULT_ARGS} )
