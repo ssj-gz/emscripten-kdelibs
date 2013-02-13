@@ -64,7 +64,11 @@ KConfigPrivate::KConfigPrivate(const KComponentData &componentData_, KConfig::Op
 
     static int use_etc_kderc = -1;
     if (use_etc_kderc < 0)
+#ifndef EMSCRIPTEN
         use_etc_kderc = getenv("KDE_SKIP_KDERC") != 0 ? 0 : 1; // for unit tests
+#else
+        use_etc_kderc = 0;
+#endif
     if (use_etc_kderc) {
 
         etc_kderc =
