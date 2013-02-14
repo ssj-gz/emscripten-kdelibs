@@ -754,15 +754,16 @@ void KXMLGUIFactoryPrivate::applyShortcutScheme(KXMLGUIClient *client, const QLi
 
 int KXMLGUIFactory::configureShortcuts(bool letterCutsOk , bool bSaveSettings )
 {
-    KShortcutsDialog dlg(KShortcutsEditor::AllActions,
+    KShortcutsDialog *dlg = new KShortcutsDialog(KShortcutsEditor::AllActions,
                          letterCutsOk ? KShortcutsEditor::LetterShortcutsAllowed : KShortcutsEditor::LetterShortcutsDisallowed,
                          qobject_cast<QWidget*>(parent()));
+    dlg->setAttribute(Qt::WA_DeleteOnClose);
     foreach (KXMLGUIClient *client, d->m_clients) {
         if(client) {
-            dlg.addCollection(client->actionCollection());
+            dlg->addCollection(client->actionCollection());
         }
     }
-    return dlg.configure(bSaveSettings);
+    return dlg->configure(bSaveSettings);
 }
 
 // Find or create
