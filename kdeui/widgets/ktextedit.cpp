@@ -616,8 +616,8 @@ void KTextEdit::contextMenuEvent(QContextMenuEvent *event)
         QMenu *popup = mousePopupMenu();
         if ( popup ) {
             aboutToShowContextMenu(popup);
-            popup->exec( event->globalPos() );
-            delete popup;
+            popup->setAttribute(Qt::WA_DeleteOnClose);
+            popup->popup( event->globalPos() );
         }
     }
     else {
