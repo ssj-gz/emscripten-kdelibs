@@ -524,7 +524,11 @@ QList<KGlobalShortcutInfo> KGlobalAccel::getGlobalShortcutsByKey(const QKeySeque
 
 bool KGlobalAccel::isGlobalShortcutAvailable(const QKeySequence &seq, const QString &comp)
 {
+#ifdef EMSCRIPTEN
+        return true;
+#else
         return self()->d->iface.isGlobalShortcutAvailable(seq[0], comp);
+#endif
 }
 
 
@@ -591,6 +595,9 @@ bool KGlobalAccel::promptStealShortcutSystemwide(
 //static
 void KGlobalAccel::stealShortcutSystemwide(const QKeySequence &seq)
 {
+#ifdef EMSCRIPTEN
+    return;
+#endif
     //get the shortcut, remove seq, and set the new shortcut
     const QStringList actionId = self()->d->iface.action(seq[0]);
     if (actionId.size() < 4) // not a global shortcut
