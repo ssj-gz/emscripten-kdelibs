@@ -156,6 +156,12 @@ int KMessageBox::createKMessageBox(KDialog *dialog, QMessageBox::Icon icon,
                              const QString &ask, bool *checkboxReturn,
                              Options options, const QString &details)
 {
+#ifdef QT_NO_LOCALEVENTLOOP
+    if (icon == QMessageBox::Critical)
+    {
+        qWarning() << "Critical error, but could not show error KMessageBox: " << text;
+    }
+#endif
     return createKMessageBox(dialog, themedMessageBoxIcon(icon), text, strlist,
                       ask, checkboxReturn, options, details, icon);
 }
