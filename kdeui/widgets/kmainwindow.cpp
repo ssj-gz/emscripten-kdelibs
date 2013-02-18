@@ -30,7 +30,7 @@
 #include "ktoolbarhandler_p.h"
 #include "kcmdlineargs.h"
 #include "ktoggleaction.h"
-#ifndef EMSCRIPTEN
+#ifndef QT_NO_SESSIONMANAGER
 #include "ksessionmanager.h"
 #endif
 #include "kstandardaction.h"
@@ -131,7 +131,7 @@ bool DockResizeListener::eventFilter(QObject *watched, QEvent *event)
     return QObject::eventFilter(watched, event);
 }
 
-#ifndef EMSCRIPTEN
+#ifndef QT_NO_SESSIONMANAGER
 class KMWSessionManager : public KSessionManager
 {
 public:
@@ -261,7 +261,7 @@ void KMainWindowPrivate::init(KMainWindow *_q)
     QObject::connect(KGlobalSettings::self(), SIGNAL(settingsChanged(int)),
                      q, SLOT(_k_slotSettingsChanged(int)));
 
-#ifndef EMSCRIPTEN
+#ifndef QT_NO_SESSIONMANAGER
     // force KMWSessionManager creation - someone a better idea?
     ksm->dummyInit();
 #endif
@@ -508,7 +508,7 @@ KMenu* KMainWindow::customHelpMenu( bool showWhatsThis )
 
 bool KMainWindow::canBeRestored( int number )
 {
-#ifndef EMSCRIPTEN
+#ifndef QT_NO_SESSIONMANAGER
     if ( !qApp->isSessionRestored() )
         return false;
 #endif
@@ -523,7 +523,7 @@ bool KMainWindow::canBeRestored( int number )
 
 const QString KMainWindow::classNameOfToplevel( int number )
 {
-#ifndef EMSCRIPTEN
+#ifndef QT_NO_SESSIONMANAGER
     if ( !qApp->isSessionRestored() )
         return QString();
 #endif

@@ -657,7 +657,7 @@ void KApplication::enableSessionManagement() {
 #endif
 }
 
-#ifndef EMSCRIPTEN
+#ifndef QT_NO_SESSIONMANAGER
 void KApplication::commitData( QSessionManager& sm )
 {
     d->session_save = true;
@@ -742,7 +742,7 @@ static void checkRestartVersion( QSessionManager& sm )
 }
 #endif // Q_WS_X11
 
-#ifndef EMSCRIPTEN
+#ifndef QT_NO_SESSIONMANAGER
 void KApplication::saveState( QSessionManager& sm )
 {
     d->session_save = true;

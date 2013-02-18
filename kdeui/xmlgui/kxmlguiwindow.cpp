@@ -31,7 +31,7 @@
 #include "kxmlguifactory.h"
 #include "kcmdlineargs.h"
 #include "ktoggleaction.h"
-#ifndef EMSCRIPTEN
+#ifndef QT_NO_SESSIONMANAGER
 #include "ksessionmanager.h"
 #endif
 #include "kstandardaction.h"

@@ -195,7 +195,7 @@ public:
      *  handling of session management with KSessionManager.
      * @internal
      */
-#ifndef EMSCRIPTEN
+#ifndef QT_NO_SESSIONMANAGER
   void commitData( QSessionManager& sm );
 #endif
 
@@ -204,7 +204,7 @@ public:
      *  handling of session management with KSessionManager.
      * @internal
      */
-#ifndef EMSCRIPTEN
+#ifndef QT_NO_SESSIONMANAGER
   void saveState( QSessionManager& sm );
 #endif
 
