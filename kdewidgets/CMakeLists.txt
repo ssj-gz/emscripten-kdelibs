@@ -89,38 +89,40 @@ if(QT_QTDESIGNER_FOUND)
   endif(NOT KDE_NO_DEPRECATED)
 
 
-  # kdewebkit widgets
-  include_directories(
-    ${CMAKE_SOURCE_DIR}/kdewebkit
-  )
+if (NOT EMSCRIPTEN)
+      # kdewebkit widgets
+      include_directories(
+        ${CMAKE_SOURCE_DIR}/kdewebkit
+      )
 
-  add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/kdewebkitwidgets.cpp
-    COMMAND "${MAKEKDEWIDGETS_EXECUTABLE}" -o ${CMAKE_CURRENT_BINARY_DIR}/kdewebkitwidgets.cpp ${CMAKE_CURRENT_SOURCE_DIR}/kdewebkit.widgets
-    MAIN_DEPENDENCY kdewebkit.widgets DEPENDS makekdewidgets)
+      add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/kdewebkitwidgets.cpp
+        COMMAND "${MAKEKDEWIDGETS_EXECUTABLE}" -o ${CMAKE_CURRENT_BINARY_DIR}/kdewebkitwidgets.cpp ${CMAKE_CURRENT_SOURCE_DIR}/kdewebkit.widgets
+        MAIN_DEPENDENCY kdewebkit.widgets DEPENDS makekdewidgets)
 
-  set(kdewebkitwidgets_PART_SRCS
-     classpreviews.cpp
-     ${CMAKE_CURRENT_BINARY_DIR}/kdewebkitwidgets.cpp
-  )
+      set(kdewebkitwidgets_PART_SRCS
+         classpreviews.cpp
+         ${CMAKE_CURRENT_BINARY_DIR}/kdewebkitwidgets.cpp
+      )
 
-  qt4_generate_moc(${CMAKE_CURRENT_BINARY_DIR}/kdewebkitwidgets.cpp ${CMAKE_CURRENT_BINARY_DIR}/kdewebkitwidgets.moc)
+      qt4_generate_moc(${CMAKE_CURRENT_BINARY_DIR}/kdewebkitwidgets.cpp ${CMAKE_CURRENT_BINARY_DIR}/kdewebkitwidgets.moc)
 
 
-  qt4_add_resources(kdewebkitwidgets_PART_SRCS kdewebkitwidgets.qrc)
+      qt4_add_resources(kdewebkitwidgets_PART_SRCS kdewebkitwidgets.qrc)
 
-  kde4_add_plugin(kdewebkitwidgets ${kdewebkitwidgets_PART_SRCS})
+      kde4_add_plugin(kdewebkitwidgets ${kdewebkitwidgets_PART_SRCS})
 
-  target_link_libraries(kdewebkitwidgets ${KDE4_KDEUI_LIBS} ${KDE4_KDEWEBKIT_LIBS} ${QT_QTWEBKIT_LIBRARY})
-  if(NOT WIN32)
-    set_target_properties(kdewebkitwidgets PROPERTIES
-                                     INSTALL_RPATH_USE_LINK_PATH TRUE
-                                     SKIP_BUILD_RPATH TRUE
-                                     BUILD_WITH_INSTALL_RPATH TRUE
-                                     INSTALL_RPATH ${LIB_INSTALL_DIR}
-                         )
-  endif(NOT WIN32)
+      target_link_libraries(kdewebkitwidgets ${KDE4_KDEUI_LIBS} ${KDE4_KDEWEBKIT_LIBS} ${QT_QTWEBKIT_LIBRARY})
+      if(NOT WIN32)
+        set_target_properties(kdewebkitwidgets PROPERTIES
+                                         INSTALL_RPATH_USE_LINK_PATH TRUE
+                                         SKIP_BUILD_RPATH TRUE
+                                         BUILD_WITH_INSTALL_RPATH TRUE
+                                         INSTALL_RPATH ${LIB_INSTALL_DIR}
+                             )
+      endif(NOT WIN32)
 
-  install(TARGETS kdewebkitwidgets  DESTINATION ${PLUGIN_INSTALL_DIR}/plugins/designer )
+      install(TARGETS kdewebkitwidgets  DESTINATION ${PLUGIN_INSTALL_DIR}/plugins/designer )
+endif()
 
 
   if (QT_QT3SUPPORT_FOUND)
