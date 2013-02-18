@@ -20,6 +20,7 @@
 #include "kmessagebox.h"
 
 #include <QtCore/QPointer>
+#include <QtCore/QDebug>
 #include <QtGui/QCheckBox>
 #include <QtGui/QGroupBox>
 #include <QtGui/QLabel>
@@ -336,6 +337,7 @@ int KMessageBox::createKMessageBox(KDialog *dialog, const QIcon &icon,
         return KMessageBox::Cancel; // We have to return something.
     }
 
+#ifndef QT_NO_LOCALEVENTLOOP
     // We use a QPointer because the dialog may get deleted
     // during exec() if the parent of the dialog gets deleted.
     // In that case the QPointer will reset to 0.
@@ -347,6 +349,11 @@ int KMessageBox::createKMessageBox(KDialog *dialog, const QIcon &icon,
     }
 
     delete (KDialog *) guardedDialog;
+#else
+    qWarning() << "TODO - properly handle KMessageBox for Emscripten!";
+    const int result = 0;
+    dialog->show();
+#endif
     return result;
 }
 
