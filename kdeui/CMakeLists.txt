@@ -335,6 +335,12 @@ set(kdeui_LIB_SRCS
  notifications/ksystemtrayicon.cpp
 )
 endif(NOT WINCE AND NOT EMSCRIPTEN)
+if (EMSCRIPTEN)
+set(kdeui_LIB_SRCS
+ ${kdeui_LIB_SRCS}
+ dialogs/kdeprintdialog.cpp
+)
+endif()
 
 
 
