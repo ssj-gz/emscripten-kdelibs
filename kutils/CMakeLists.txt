@@ -2,33 +2,35 @@ project(kutils)
 include_directories( ${KDE4_KDEUI_INCLUDES} ${KDE4_KPARTS_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR})
 
 ########### kemoticons ################
-add_subdirectory(kemoticons)
+if (NOT EMSCRIPTEN)
+    add_subdirectory(kemoticons)
 
-set(kemoticons_LIB_SRCS
-    kemoticons/kemoticons.cpp
-    kemoticons/kemoticonstheme.cpp
-    kemoticons/kemoticonsprovider.cpp
-)
+    set(kemoticons_LIB_SRCS
+        kemoticons/kemoticons.cpp
+        kemoticons/kemoticonstheme.cpp
+        kemoticons/kemoticonsprovider.cpp
+    )
 
-kde4_add_library(kemoticons ${LIBRARY_TYPE} ${kemoticons_LIB_SRCS})
-target_link_libraries(kemoticons ${KDE4_KIO_LIBS})
-target_link_libraries(kemoticons LINK_INTERFACE_LIBRARIES kdecore kdeui ${QT_QTGUI_LIBRARY})
-set_target_properties(kemoticons PROPERTIES
-                      VERSION ${GENERIC_LIB_VERSION}
-                      SOVERSION ${GENERIC_LIB_SOVERSION})
+    kde4_add_library(kemoticons ${LIBRARY_TYPE} ${kemoticons_LIB_SRCS})
+    target_link_libraries(kemoticons ${KDE4_KIO_LIBS})
+    target_link_libraries(kemoticons LINK_INTERFACE_LIBRARIES kdecore kdeui ${QT_QTGUI_LIBRARY})
+    set_target_properties(kemoticons PROPERTIES
+                          VERSION ${GENERIC_LIB_VERSION}
+                          SOVERSION ${GENERIC_LIB_SOVERSION})
 
-install(FILES kemoticons/kemoticonsTheme.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
+    install(FILES kemoticons/kemoticonsTheme.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
-install(FILES
-    kemoticons_export.h
-    kemoticons/kemoticons.h
-    kemoticons/kemoticonstheme.h
-    kemoticons/kemoticonsprovider.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}
-    COMPONENT Devel
-)
+    install(FILES
+        kemoticons_export.h
+        kemoticons/kemoticons.h
+        kemoticons/kemoticonstheme.h
+        kemoticons/kemoticonsprovider.h
+        DESTINATION ${INCLUDE_INSTALL_DIR}
+        COMPONENT Devel
+    )
 
-install(TARGETS kemoticons EXPORT kdelibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
+    install(TARGETS kemoticons EXPORT kdelibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
+endif()
 
 
 ######## kidletime ####################
