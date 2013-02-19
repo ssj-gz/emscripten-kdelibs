@@ -16,15 +16,18 @@ STRING(REGEX REPLACE "(\r?\n)+$" "" SDL_LINK_FLAGS "${SDL_LINK_FLAGS}")
 # which compilers to use for C and C++
 SET(CMAKE_C_COMPILER ccache clang)
 SET(CMAKE_CXX_COMPILER ccache clang++)
-SET(CMAKE_C_LINK_EXECUTABLE "clang -O0 -fno-inline -o <TARGET> <LINK_FLAGS> <OBJECTS> <LINK_LIBRARIES> ${SDL_LINK_FLAGS} -lrt -lz -lpthread ")
-SET(CMAKE_CXX_LINK_EXECUTABLE "clang++ -O0 -fno-inline -o <TARGET> <LINK_FLAGS> <OBJECTS> <LINK_LIBRARIES> ${SDL_LINK_FLAGS} -lrt -lz -lpthread ")
+SET(CMAKE_C_LINK_EXECUTABLE "clang -use-gold-plugin -O0 -fno-inline -o <TARGET> <LINK_FLAGS> <OBJECTS> <LINK_LIBRARIES> ${SDL_LINK_FLAGS} -lrt -lz -lpthread ")
+SET(CMAKE_CXX_LINK_EXECUTABLE "clang++ -use-gold-plugin -O0 -fno-inline -o <TARGET> <LINK_FLAGS> <OBJECTS> <LINK_LIBRARIES> ${SDL_LINK_FLAGS} -lrt -lz -lpthread ")
 SET(CMAKE_CXX_CREATE_SHARED_LIBRARY  "clang++ -o <TARGET> <LINK_FLAGS> -lz -lpthread <OBJECTS> <LINK_LIBRARIES>")
-SET(CMAKE_CXX_CREATE_STATIC_LIBRARY  "ar qs <TARGET> <OBJECTS> ")
-set(CMAKE_CXX_FLAGS "-O0 -fno-inline -g `sdl-config --cflags` -Qunused-arguments -fcolor-diagnostics" CACHE STRING "" FORCE)
-set(CMAKE_C_FLAGS "-O0 -fno-inline -g `sdl-config --cflags` -Qunused-arguments -fcolor-diagnostics" CACHE STRING "" FORCE)
+#SET(CMAKE_CXX_CREATE_STATIC_LIBRARY  "ar qs <TARGET> <OBJECTS> ")
+SET(CMAKE_CXX_CREATE_STATIC_LIBRARY  "llvm-link -o <TARGET> <OBJECTS> ")
+set(CMAKE_CXX_FLAGS "-emit-llvm -O0 -fno-inline -g `sdl-config --cflags` -Qunused-arguments -fcolor-diagnostics" CACHE STRING "" FORCE)
+set(CMAKE_C_FLAGS "-emit-llvm -O0 -fno-inline -g `sdl-config --cflags` -Qunused-arguments -fcolor-diagnostics" CACHE STRING "" FORCE)
 add_definitions("-DEMSCRIPTEN -DEMSCRIPTEN_NATIVE") 
 # here is the target environment located
 SET(CMAKE_FIND_ROOT_PATH  ${ENV}{EMSCRIPTEN_ROOT_PATH} ${KDE_PREFIX} )
+set(CMAKE_STATIC_LIBRARY_SUFFIX_C ".a.bc")
+set(CMAKE_STATIC_LIBRARY_SUFFIX_CXX ".a.bc")
  
 # adjust the default behaviour of the FIND_XXX() commands:
 # search headers and libraries in the target environment, search
