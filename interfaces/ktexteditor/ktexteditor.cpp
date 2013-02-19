@@ -172,9 +172,15 @@ KTextEditorFactorySet::~KTextEditorFactorySet() {
 
 Editor *KTextEditor::editor(const char *libname)
 {
+#ifndef EMSCRIPTEN
   KPluginFactory *fact=KPluginLoader(libname).factory();
-
   KTextEditor::Factory *ef=qobject_cast<KTextEditor::Factory*>(fact);
+#else
+  // HACK : TODO - generalise (in KPluginFactory) so that we can use arbitray static plugins based on libname.
+  KPluginFactory *fact = 0;
+  KTextEditor::Factory *ef=qobject_cast<KTextEditor::Factory*>(QPluginLoader::staticInstances().first());
+#endif
+
 
   if (!ef) {
     delete fact;
