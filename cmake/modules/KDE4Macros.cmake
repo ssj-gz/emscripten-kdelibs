@@ -1016,7 +1016,9 @@ macro (KDE4_ADD_EXECUTABLE _target_NAME)
       set_target_properties(${_target_NAME} PROPERTIES COMPILE_FLAGS -DKDESRCDIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/\\"")
    endif (_test)
 
-   kde4_handle_rpath_for_executable(${_target_NAME})
+   if (NOT EMSCRIPTEN)
+       kde4_handle_rpath_for_executable(${_target_NAME})
+   endif()
 
    if (WIN32)
       target_link_libraries(${_target_NAME} ${QT_QTMAIN_LIBRARY})
