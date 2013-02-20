@@ -1424,6 +1424,7 @@ KSharedDataCache::KSharedDataCache(const QString &cacheName,
                                    unsigned expectedItemSize)
   : d(0)
 {
+#ifndef EMSCRIPTEN
     try {
         d = new Private(cacheName, defaultCacheSize, expectedItemSize);
     }
@@ -1441,6 +1442,7 @@ KSharedDataCache::KSharedDataCache(const QString &cacheName,
             d = 0; // Just in case
         }
     }
+#endif
 }
 
 KSharedDataCache::~KSharedDataCache()
@@ -1467,6 +1469,9 @@ KSharedDataCache::~KSharedDataCache()
 
 bool KSharedDataCache::insert(const QString &key, const QByteArray &data)
 {
+#ifdef EMSCRIPTEN
+    return false;
+#endif
     try {
         Private::CacheLocker lock(d);
         if (lock.failed()) {
@@ -1626,6 +1631,9 @@ bool KSharedDataCache::insert(const QString &key, const QByteArray &data)
 
 bool KSharedDataCache::find(const QString &key, QByteArray *destination) const
 {
+#ifdef EMSCRIPTEN
+    return false;
+#endif
     try {
         Private::CacheLocker lock(d);
         if (lock.failed()) {
@@ -1684,6 +1692,9 @@ void KSharedDataCache::clear()
 
 bool KSharedDataCache::contains(const QString &key) const
 {
+#ifdef EMSCRIPTEN
+    return false;
+#endif
     try {
         Private::CacheLocker lock(d);
         if (lock.failed()) {
