@@ -33,7 +33,9 @@ KServiceTypeFactory::KServiceTypeFactory()
     kServiceTypeFactoryInstance->instanceCreated(this);
     if (!KSycoca::self()->isBuilding()) {
         QDataStream* str = stream();
+#ifndef EMSCRIPTEN
         Q_ASSERT(str);
+#endif
         if (str) {
             // Read Header
             qint32 n;
