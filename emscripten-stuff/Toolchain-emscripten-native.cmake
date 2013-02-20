@@ -13,17 +13,23 @@ execute_process(COMMAND sdl-config "--libs"
                 OUTPUT_VARIABLE SDL_LINK_FLAGS)
 STRING(REGEX REPLACE "(\r?\n)+$" "" SDL_LINK_FLAGS "${SDL_LINK_FLAGS}")
 
- 
+set(EMSCRIPTEN_USE_AR_FOR_STATIC_LIBRARIES $ENV{EMSCRIPTEN_USE_AR_FOR_STATIC_LIBRARIES})
+if (EMSCRIPTEN_USE_AR_FOR_STATIC_LIBRARIES STREQUAL "yes")
+    SET(GENERATE_LLVM_BITCODE "") 
+    SET(CMAKE_CXX_CREATE_STATIC_LIBRARY  "ar qs <TARGET> <OBJECTS> ")
+else()
+    SET(GENERATE_LLVM_BITCODE "-emit-llvm") 
+    SET(CMAKE_CXX_CREATE_STATIC_LIBRARY  "llvm-link -o <TARGET> <OBJECTS> ")
+endif()
+
 # which compilers to use for C and C++
 SET(CMAKE_C_COMPILER ccache clang)
 SET(CMAKE_CXX_COMPILER ccache clang++)
 SET(CMAKE_C_LINK_EXECUTABLE "clang -use-gold-plugin -O0 -fno-inline -o <TARGET> <LINK_FLAGS> <OBJECTS> <LINK_LIBRARIES> ${SDL_LINK_FLAGS} -lrt -lz -lpthread ")
 SET(CMAKE_CXX_LINK_EXECUTABLE "clang++ -use-gold-plugin -O0 -fno-inline -o <TARGET> <LINK_FLAGS> <OBJECTS> <LINK_LIBRARIES> ${SDL_LINK_FLAGS} -lrt -lz -lpthread ")
 SET(CMAKE_CXX_CREATE_SHARED_LIBRARY  "clang++ -o <TARGET> <LINK_FLAGS> -lz -lpthread <OBJECTS> <LINK_LIBRARIES>")
-#SET(CMAKE_CXX_CREATE_STATIC_LIBRARY  "ar qs <TARGET> <OBJECTS> ")
-SET(CMAKE_CXX_CREATE_STATIC_LIBRARY  "llvm-link -o <TARGET> <OBJECTS> ")
-set(CMAKE_CXX_FLAGS "-emit-llvm -O0 -fno-inline -g `sdl-config --cflags` -Qunused-arguments -fcolor-diagnostics" CACHE STRING "" FORCE)
-set(CMAKE_C_FLAGS "-emit-llvm -O0 -fno-inline -g `sdl-config --cflags` -Qunused-arguments -fcolor-diagnostics" CACHE STRING "" FORCE)
+set(CMAKE_CXX_FLAGS "${GENERATE_LLVM_BITCODE} -O0 -fno-inline -g `sdl-config --cflags` -Qunused-arguments -fcolor-diagnostics" CACHE STRING "" FORCE)
+set(CMAKE_C_FLAGS "${GENERATE_LLVM_BITCODE} -O0 -fno-inline -g `sdl-config --cflags` -Qunused-arguments -fcolor-diagnostics" CACHE STRING "" FORCE)
 add_definitions("-DEMSCRIPTEN -DEMSCRIPTEN_NATIVE") 
 # here is the target environment located
 SET(CMAKE_FIND_ROOT_PATH  ${ENV}{EMSCRIPTEN_ROOT_PATH} ${KDE_PREFIX} )
