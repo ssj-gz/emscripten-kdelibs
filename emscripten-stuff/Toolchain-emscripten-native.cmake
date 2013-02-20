@@ -6,6 +6,7 @@ set(EMSCRIPTEN_SYSTEM $ENV{EMSCRIPTEN_ROOT_PATH}/system/)
 SET(CMAKE_SYSTEM_NAME Emscripten)
 SET(CMAKE_SYSTEM_PROCESSOR Emscripten)
 SET (CMAKE_CROSSCOMPILING   TRUE)
+SET(EMSCRIPTEN_NATIVE 1)
 
 # We can't use FindSDL, alas, as CMake will not look on the host system.  This will have to do instead :.
 execute_process(COMMAND sdl-config "--libs"
