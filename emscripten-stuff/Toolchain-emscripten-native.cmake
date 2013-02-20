@@ -27,8 +27,6 @@ set(CMAKE_C_FLAGS "-emit-llvm -O0 -fno-inline -g `sdl-config --cflags` -Qunused-
 add_definitions("-DEMSCRIPTEN -DEMSCRIPTEN_NATIVE") 
 # here is the target environment located
 SET(CMAKE_FIND_ROOT_PATH  ${ENV}{EMSCRIPTEN_ROOT_PATH} ${KDE_PREFIX} )
-set(CMAKE_STATIC_LIBRARY_SUFFIX_C ".a.bc")
-set(CMAKE_STATIC_LIBRARY_SUFFIX_CXX ".a.bc")
  
 # adjust the default behaviour of the FIND_XXX() commands:
 # search headers and libraries in the target environment, search
