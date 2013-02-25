@@ -334,9 +334,9 @@ int TCPSlaveBase::connectToHost(const QString& host, quint16 port, QString* erro
         errorString->clear();  // clear prior error messages.
     }
 
+#ifndef QT_NO_OPENSSL
     d->socket.setVerificationPeerName(host); // Used for ssl certificate verification (SNI)
 
-#ifndef QT_NO_OPENSSL
     //  - leaving SSL - warn before we even connect
     //### see if it makes sense to move this into the HTTP ioslave which is the only
     //    user.
