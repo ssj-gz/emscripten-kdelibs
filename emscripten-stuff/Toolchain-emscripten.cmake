@@ -20,8 +20,6 @@ set(CMAKE_C_FLAGS "-strip-debug -emit-llvm -nostdinc -Qunused-arguments -fcolor-
 add_definitions("-DEMSCRIPTEN") 
 # here is the target environment located
 SET(CMAKE_FIND_ROOT_PATH  ${ENV}{EMSCRIPTEN_ROOT_PATH} ${KDE_PREFIX} )
-set(CMAKE_STATIC_LIBRARY_SUFFIX_C ".a.bc")
-set(CMAKE_STATIC_LIBRARY_SUFFIX_CXX ".a.bc")
  
 # adjust the default behaviour of the FIND_XXX() commands:
 # search headers and libraries in the target environment, search
