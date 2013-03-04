@@ -135,22 +135,14 @@ static QString qtFilter(const QString& filter)
     return qtFilter(filters);
 }
 
-#ifdef EMSCRIPTEN
-#include <kfile/kfilemodule.h>
-#endif
-
 static KAbstractFileModule* s_module = 0;
 static KAbstractFileModule* loadFileModule( const QString& moduleName )
 {
-#ifndef EMSCRIPTEN
     KService::Ptr fileModuleService = KService::serviceByDesktopName(moduleName);
     if(fileModuleService)
         return fileModuleService->createInstance<KAbstractFileModule>();
     else
         return 0;
-#else
-    return new KFileModule(0, QList<QVariant>());
-#endif
 }
 
 static const char s_defaultFileModuleName[] = "kfilemodule";
