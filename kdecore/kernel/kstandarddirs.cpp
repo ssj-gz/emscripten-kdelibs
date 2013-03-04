@@ -1705,6 +1705,105 @@ void KStandardDirs::addKDEDefaults()
 #else
     addPrefix(QString::fromAscii("/"));
 #endif
+    QStringList kdedirList;
+    // begin KDEDIRS
+    QString kdedirs = readEnvPath("KDEDIRS");
+
+    if (!kdedirs.isEmpty())
+    {
+        tokenize(kdedirList, kdedirs, QString(QLatin1Char(KPATH_SEPARATOR)));
+    }
+    kdedirList.append(installPath("kdedir"));
+    // begin XDG_CONFIG_XXX
+    QStringList xdgdirList;
+    QString xdgdirs = readEnvPath("XDG_CONFIG_DIRS");
+    if (!xdgdirs.isEmpty())
+    {
+        tokenize(xdgdirList, xdgdirs, QString(QLatin1Char(KPATH_SEPARATOR)));
+    }
+    else
+    {
+        xdgdirList.clear();
+        xdgdirList.append(QString::fromLatin1("/etc/xdg"));
+#ifdef Q_WS_WIN
+        xdgdirList.append(installPath("kdedir") + QString::fromLatin1("etc/xdg"));
+#else
+        xdgdirList.append(QFile::decodeName(KDESYSCONFDIR "/xdg"));
+#endif
+    }
+
+    QString localXdgDir = readEnvPath("XDG_CONFIG_HOME");
+    if (!localXdgDir.isEmpty()) {
+        if (!localXdgDir.endsWith(QLatin1Char('/')))
+            localXdgDir += QLatin1Char('/');
+    } else {
+#ifdef Q_WS_MACX
+        localXdgDir = QDir::homePath() + QString::fromLatin1("/Library/Preferences/XDG/");
+#else
+        localXdgDir = QDir::homePath() + QString::fromLatin1("/.config/");
+#endif
+    }
+
+    localXdgDir = KShell::tildeExpand(localXdgDir);
+    addXdgConfigPrefix(localXdgDir);
+
+    for (QStringList::ConstIterator it = xdgdirList.constBegin();
+         it != xdgdirList.constEnd(); ++it)
+    {
+        QString dir = KShell::tildeExpand(*it);
+        addXdgConfigPrefix(dir);
+    }
+    // end XDG_CONFIG_XXX
+
+    // begin XDG_DATA_XXX
+    QStringList kdedirDataDirs;
+    for (QStringList::ConstIterator it = kdedirList.constBegin();
+         it != kdedirList.constEnd(); ++it) {
+        QString dir = *it;
+        if (!dir.endsWith(QLatin1Char('/')))
+            dir += QLatin1Char('/');
+        kdedirDataDirs.append(dir + QLatin1String("share/"));
+    }
+
+    xdgdirs = readEnvPath("XDG_DATA_DIRS");
+    if (!xdgdirs.isEmpty()) {
+        tokenize(xdgdirList, xdgdirs, QString(QLatin1Char(KPATH_SEPARATOR)));
+        // Ensure the kdedirDataDirs are in there too,
+        // otherwise resourceDirs() will add kdedir/share/applications/kde4
+        // as returned by installPath(), and that's incorrect.
+        Q_FOREACH(const QString& dir, kdedirDataDirs) {
+            if (!xdgdirList.contains(dir))
+                xdgdirList.append(dir);
+        }
+    } else {
+        xdgdirList = kdedirDataDirs;
+#ifndef Q_WS_WIN
+        xdgdirList.append(QString::fromLatin1("/usr/local/share/"));
+        xdgdirList.append(QString::fromLatin1("/usr/share/"));
+#endif
+    }
+
+    localXdgDir = readEnvPath("XDG_DATA_HOME");
+    if (!localXdgDir.isEmpty())
+    {
+        if (localXdgDir[localXdgDir.length()-1] != QLatin1Char('/'))
+            localXdgDir += QLatin1Char('/');
+    }
+    else
+    {
+        localXdgDir = QDir::homePath() + QLatin1String("/.local/share/");
+    }
+
+    localXdgDir = KShell::tildeExpand(localXdgDir);
+    addXdgDataPrefix(localXdgDir);
+
+    for (QStringList::ConstIterator it = xdgdirList.constBegin();
+         it != xdgdirList.constEnd(); ++it)
+    {
+        QString dir = KShell::tildeExpand(*it);
+        addXdgDataPrefix(dir);
+    }
+    // end XDG_DATA_XXX
     return;
 #else
     addResourcesFrom_krcdirs();
