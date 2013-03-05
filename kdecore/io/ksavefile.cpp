@@ -112,6 +112,7 @@ bool KSaveFile::open(OpenMode flags)
         return false;
     }
 
+#ifndef EMSCRIPTEN
     // if we're overwriting an existing file, ensure temp file's
     // permissions are the same as existing file so the existing
     // file's permissions are preserved. this will succeed completely
@@ -130,6 +131,7 @@ bool KSaveFile::open(OpenMode flags)
         mode_t umsk = KGlobal::umask();
         fchmod(tempFile.handle(), 0666&(~umsk));
     }
+#endif
 
     //Open oursleves with the temporary file
     QFile::setFileName(tempFile.fileName());
