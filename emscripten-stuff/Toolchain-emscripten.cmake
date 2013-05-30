@@ -8,16 +8,19 @@ SET(CMAKE_SYSTEM_PROCESSOR Emscripten)
 SET (CMAKE_CROSSCOMPILING   TRUE)
  
 # which compilers to use for C and C++
-SET(CMAKE_C_COMPILER ccache clang)
-SET(CMAKE_CXX_COMPILER ccache clang++)
+#SET(CMAKE_C_COMPILER ccache clang)
+#SET(CMAKE_CXX_COMPILER ccache clang++)
+SET(CMAKE_C_COMPILER $ENV{EMSCRIPTEN_ROOT_PATH}/emcc)
+SET(CMAKE_CXX_COMPILER $ENV{EMSCRIPTEN_ROOT_PATH}/em++)
 SET(CMAKE_C_LINK_EXECUTABLE "llvm-link -o <TARGET> <LINK_FLAGS> <OBJECTS> <LINK_LIBRARIES>")
 SET(CMAKE_CXX_LINK_EXECUTABLE ${CMAKE_C_LINK_EXECUTABLE})
 SET(CMAKE_CXX_CREATE_SHARED_LIBRARY "false")
 #SET(CMAKE_CXX_CREATE_STATIC_LIBRARY  "llvm-ar q <TARGET> <OBJECTS> ")
 SET(CMAKE_CXX_CREATE_STATIC_LIBRARY  "llvm-link -o <TARGET> <OBJECTS> ")
-set(CMAKE_CXX_FLAGS "-strip-debug -emit-llvm -nostdinc++ -nostdinc -Qunused-arguments -fcolor-diagnostics -m32 -O0 -isystem${EMSCRIPTEN_SYSTEM}/include -isystem${EMSCRIPTEN_SYSTEM}/include/bsd -isystem${EMSCRIPTEN_SYSTEM}/include/libcxx -isystem${EMSCRIPTEN_SYSTEM}/include/libc -isystem${EMSCRIPTEN_SYSTEM}/include/sys -isystem${EMSCRIPTEN_SYSTEM}/include/net -isystem${EMSCRIPTEN_SYSTEM}/lib/libcxxabi/include/" CACHE STRING "" FORCE)
-set(CMAKE_C_FLAGS "-strip-debug -emit-llvm -nostdinc -Qunused-arguments -fcolor-diagnostics -m32 -isystem${EMSCRIPTEN_SYSTEM}/include -isystem${EMSCRIPTEN_SYSTEM}/include/bsd -isystem${EMSCRIPTEN_SYSTEM}/include/libcxx -isystem${EMSCRIPTEN_SYSTEM}/include/libc -isystem${EMSCRIPTEN_SYSTEM}/include/sys " CACHE STRING "" FORCE)
-add_definitions("-DEMSCRIPTEN") 
+#set(CMAKE_CXX_FLAGS "-strip-debug -emit-llvm -nostdinc++ -nostdinc -Qunused-arguments -fcolor-diagnostics -m32 -O0 -isystem${EMSCRIPTEN_SYSTEM}/include -isystem${EMSCRIPTEN_SYSTEM}/include/bsd -isystem${EMSCRIPTEN_SYSTEM}/include/libcxx -isystem${EMSCRIPTEN_SYSTEM}/include/libc -isystem${EMSCRIPTEN_SYSTEM}/include/sys -isystem${EMSCRIPTEN_SYSTEM}/include/net -isystem${EMSCRIPTEN_SYSTEM}/lib/libcxxabi/include/" CACHE STRING "" FORCE)
+#set(CMAKE_C_FLAGS "-strip-debug -emit-llvm -nostdinc -Qunused-arguments -fcolor-diagnostics -m32 -isystem${EMSCRIPTEN_SYSTEM}/include -isystem${EMSCRIPTEN_SYSTEM}/include/bsd -isystem${EMSCRIPTEN_SYSTEM}/include/libcxx -isystem${EMSCRIPTEN_SYSTEM}/include/libc -isystem${EMSCRIPTEN_SYSTEM}/include/sys " CACHE STRING "" FORCE)
+#add_definitions("-DEMSCRIPTEN") 
+
 # here is the target environment located
 SET(CMAKE_FIND_ROOT_PATH  ${ENV}{EMSCRIPTEN_ROOT_PATH} ${KDE_PREFIX} )
  
